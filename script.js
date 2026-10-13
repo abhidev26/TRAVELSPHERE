@@ -2640,3 +2640,70 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 })();
 });
+/* ==========================================
+   COMMIT 15 — TRIP EXPORT SYSTEM
+========================================== */
+
+function downloadTripPlan(format = "txt") {
+    const result = document.querySelector(
+        "#plannerResult, .planner-result, .generated-result"
+    );
+
+    if (!result || !result.innerText.trim()) {
+        alert("Please generate a trip plan before exporting.");
+        return;
+    }
+
+    const destinationInput = document.querySelector(
+        "#planDestination, #destination, [name='destination']"
+    );
+
+    const destination =
+        destinationInput?.value?.trim() || "My-TravelSphere-Trip";
+
+    const safeName = destination
+        .replace(/[^a-z0-9_-]/gi, "-")
+        .replace(/-+/g, "-");
+
+    const trip = {
+        app: "TravelSphere",
+        destination,
+        exportedAt: new Date().toISOString(),
+        itinerary: result.innerText.trim()
+    };
+
+    let content;
+    let mimeType;
+    let extension;
+
+    if (format === "json") {
+        content = JSON.stringify(trip, null, 2);
+        mimeType = "application/json;charset=utf-8";
+        extension = "json";
+    } else {
+        content = [
+            "TRAVELSPHERE — MY TRIP PLAN",
+            "================================",
+            `Destination: ${trip.destination}`,
+            `Exported: ${new Date().toLocaleString()}`,
+            "",
+            trip.itinerary
+        ].join("\n");
+
+        mimeType = "text/plain;charset=utf-8";
+        extension = "txt";
+    }
+
+    const blob = new Blob([content], { type: mimeType });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+
+    link.href = url;
+    link.download = `${safeName}-trip.${extension}`;
+
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+
+    setTimeout(() => URL.revokeObjectURL(url), 1000);
+}

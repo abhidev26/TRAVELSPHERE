@@ -561,8 +561,25 @@
                     Fill in the planner to generate
                     your day-by-day itinerary.
                 </p>
+                <!-- COMMIT 15: TRIP EXPORT BUTTONS -->
+<div class="trip-actions">
+    <button
+        type="button"
+        class="export-trip-btn"
+        onclick="downloadTripPlan('txt')"
+    >
+        <span>📄</span> Download TXT
+    </button>
 
-            </div>
+    <button
+        type="button"
+        class="export-trip-btn"
+        onclick="downloadTripPlan('json')"
+    >
+        <span>📦</span> Export JSON
+    </button>
+</div>
+   </div>
 
         </div>
 

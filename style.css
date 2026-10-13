@@ -2890,4 +2890,61 @@ footer,
         animation-duration: 0.01ms !important;
     }
 }
+/* ==========================================
+   COMMIT 15 — TRIP EXPORT SYSTEM
+========================================== */
+
+.trip-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: 24px;
+}
+
+.export-trip-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 9px;
+    padding: 12px 18px;
+
+    color: var(--text);
+    background: var(--surface);
+
+    border: 1px solid var(--border);
+    border-radius: 14px;
+
+    font-family: inherit;
+    font-size: 14px;
+    font-weight: 700;
+
+    cursor: pointer;
+
+    box-shadow: var(--shadow);
+
+    transition:
+        transform 0.25s ease,
+        border-color 0.25s ease,
+        background-color 0.25s ease;
+}
+
+.export-trip-btn:hover {
+    transform: translateY(-3px);
+    border-color: var(--primary);
+}
+
+.export-trip-btn:focus-visible {
+    outline: 2px solid var(--primary);
+    outline-offset: 3px;
+}
+
+@media (max-width: 600px) {
+    .trip-actions {
+        flex-direction: column;
+    }
+
+    .export-trip-btn {
+        width: 100%;
+    }
+}
 }
