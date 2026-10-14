@@ -2707,3 +2707,78 @@ function downloadTripPlan(format = "txt") {
 
     setTimeout(() => URL.revokeObjectURL(url), 1000);
 }
+
+/* COMMIT 16: TRIP SHARING */
+
+function getTripShareText() {
+  const result =
+    document.querySelector("#plannerResult") ||
+    document.querySelector(".planner-result") ||
+    document.querySelector(".generated-result");
+
+  if (!result || !result.innerText.trim()) {
+    alert("Please generate your trip itinerary first!");
+    return null;
+  }
+
+  return result.innerText.trim();
+}
+
+async function copyTripPlan() {
+  const tripText = getTripShareText();
+  if (!tripText) return;
+
+  try {
+    await navigator.clipboard.writeText(tripText);
+    showTripShareMessage("Itinerary copied successfully!");
+  } catch (error) {
+    const textArea = document.createElement("textarea");
+    textArea.value = tripText;
+    textArea.style.position = "fixed";
+    textArea.style.opacity = "0";
+    document.body.appendChild(textArea);
+    textArea.select();
+
+    const copied = document.execCommand("copy");
+    textArea.remove();
+
+    showTripShareMessage(
+      copied
+        ? "Itinerary copied successfully!"
+        : "Copy failed. Please select and copy the itinerary manually."
+    );
+  }
+}
+
+async function shareTripPlan() {
+  const tripText = getTripShareText();
+  if (!tripText) return;
+
+  if (navigator.share) {
+    try {
+      await navigator.share({
+        title: "My TravelSphere Trip",
+        text: tripText
+      });
+    } catch (error) {
+      if (error.name !== "AbortError") {
+        showTripShareMessage("Sharing failed. Try Copy Itinerary instead.");
+      }
+    }
+  } else {
+    await copyTripPlan();
+    showTripShareMessage(
+      "Sharing is not supported here. Copy the itinerary and send it to your friends."
+    );
+  }
+}
+
+function showTripShareMessage(message) {
+  const messageElement = document.getElementById("shareTripMessage");
+
+  if (messageElement) {
+    messageElement.textContent = message;
+  } else {
+    alert(message);
+  }
+}

@@ -2947,4 +2947,38 @@ footer,
         width: 100%;
     }
 }
+
+/* COMMIT 16: TRIP SHARING */
+
+.trip-share-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 20px;
+}
+
+.share-trip-btn,
+.copy-trip-btn {
+  padding: 12px 20px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: linear-gradient(135deg, var(--primary), var(--primary-2));
+  color: #fff;
+  font-weight: 700;
+  cursor: pointer;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.share-trip-btn:hover,
+.copy-trip-btn:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow);
+}
+
+.share-trip-message {
+  margin-top: 10px;
+  color: var(--muted);
+  font-size: 14px;
+  overflow-wrap: anywhere;
+}
 }
