@@ -2981,4 +2981,118 @@ footer,
   font-size: 14px;
   overflow-wrap: anywhere;
 }
+
+/* COMMIT 17: TRIP HISTORY */
+
+.trip-history-section {
+  width: min(1200px, 92%);
+  margin: 60px auto;
+  padding: 28px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--surface);
+  box-shadow: var(--shadow);
+}
+
+.trip-history-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  flex-wrap: wrap;
+  margin-bottom: 24px;
+}
+
+.history-eyebrow {
+  color: var(--primary);
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 2px;
+}
+
+.trip-history-header h2 {
+  margin: 6px 0;
+  color: var(--text);
+  font-size: clamp(26px, 4vw, 36px);
+}
+
+.trip-history-header p,
+.history-card p {
+  color: var(--muted);
+}
+
+.history-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 18px;
+}
+
+.history-card {
+  padding: 20px;
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  background: var(--surface-strong);
+  transition: transform 0.25s ease, border-color 0.25s ease;
+  overflow-wrap: anywhere;
+}
+
+.history-card:hover {
+  transform: translateY(-4px);
+  border-color: var(--primary);
+}
+
+.history-card h3 {
+  color: var(--text);
+  margin: 0 0 10px;
+}
+
+.history-card p {
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+.history-card button,
+.clear-history-btn {
+  padding: 10px 14px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--surface);
+  color: var(--text);
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.history-card button:hover,
+.clear-history-btn:hover {
+  border-color: var(--primary);
+}
+
+.saved-itineraries-title {
+  color: var(--text);
+  margin: 34px 0 18px;
+}
+
+.history-empty {
+  color: var(--muted);
+  padding: 14px 0;
+}
+
+.history-date {
+  font-size: 12px !important;
+  opacity: 0.8;
+}
+
+@media (max-width: 600px) {
+  .trip-history-section {
+    padding: 18px;
+  }
+
+  .trip-history-header {
+    align-items: flex-start;
+  }
+
+  .history-grid {
+    grid-template-columns: 1fr;
+  }
+}
 }

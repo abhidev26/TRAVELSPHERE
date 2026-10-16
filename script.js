@@ -2781,4 +2781,178 @@ function showTripShareMessage(message) {
   } else {
     alert(message);
   }
+  
+/* COMMIT 17: TRIP HISTORY */
+
+const TRAVELSPHERE_HISTORY_KEY = "travelsphere_trip_history";
+const TRAVELSPHERE_RECENT_KEY = "travelsphere_recent_destinations";
+
+function readTravelSphereStorage(key) {
+  try {
+    const value = JSON.parse(localStorage.getItem(key) || "[]");
+    return Array.isArray(value) ? value : [];
+  } catch (error) {
+    return [];
+  }
+}
+
+function saveTravelSphereStorage(key, items) {
+  try {
+    localStorage.setItem(key, JSON.stringify(items));
+  } catch (error) {
+    console.error("Unable to save TravelSphere history:", error);
+  }
+}
+
+function recordRecentDestination(name) {
+  if (!name || typeof name !== "string") return;
+
+  const destination = name.trim();
+  if (!destination) return;
+
+  let items = readTravelSphereStorage(TRAVELSPHERE_RECENT_KEY);
+
+  items = items.filter(
+    item => item.name.toLowerCase() !== destination.toLowerCase()
+  );
+
+  items.unshift({
+    name: destination,
+    viewedAt: new Date().toISOString()
+  });
+
+  saveTravelSphereStorage(TRAVELSPHERE_RECENT_KEY, items.slice(0, 8));
+  renderTravelSphereHistory();
+}
+
+function recordGeneratedItinerary(text) {
+  if (!text || typeof text !== "string" || !text.trim()) return;
+
+  let items = readTravelSphereStorage(TRAVELSPHERE_HISTORY_KEY);
+
+  items.unshift({
+    id: Date.now(),
+    text: text.trim(),
+    createdAt: new Date().toISOString()
+  });
+
+  saveTravelSphereStorage(TRAVELSPHERE_HISTORY_KEY, items.slice(0, 8));
+  renderTravelSphereHistory();
+}
+
+function renderTravelSphereHistory() {
+  const destinationContainer = document.getElementById("recentDestinations");
+  const itineraryContainer = document.getElementById("recentItineraries");
+
+  if (!destinationContainer || !itineraryContainer) return;
+
+  const destinations = readTravelSphereStorage(TRAVELSPHERE_RECENT_KEY);
+  const itineraries = readTravelSphereStorage(TRAVELSPHERE_HISTORY_KEY);
+
+  destinationContainer.replaceChildren();
+  itineraryContainer.replaceChildren();
+
+  if (destinations.length === 0) {
+    destinationContainer.textContent =
+      "No recently viewed destinations yet.";
+  } else {
+    destinations.forEach(item => {
+      const card = document.createElement("article");
+      card.className = "history-card";
+
+      const title = document.createElement("h3");
+      title.textContent = item.name;
+
+      const date = document.createElement("p");
+      date.className = "history-date";
+      date.textContent = item.viewedAt
+        ? "Viewed " + new Date(item.viewedAt).toLocaleDateString()
+        : "";
+
+      const button = document.createElement("button");
+      button.type = "button";
+      button.textContent = "Explore Again";
+      button.addEventListener("click", () => {
+        const matchingCard = [...document.querySelectorAll(
+          ".destination-card, .destination-card button"
+        )].find(element =>
+          element.textContent.toLowerCase().includes(item.name.toLowerCase())
+        );
+
+        if (matchingCard) {
+          matchingCard.scrollIntoView({
+            behavior: "smooth",
+            block: "center"
+          });
+          matchingCard.click();
+        } else {
+          showTripShareMessage(
+            "Find " + item.name + " in the destination section to explore it again."
+          );
+        }
+      });
+
+      card.append(title, date, button);
+      destinationContainer.appendChild(card);
+    });
+  }
+
+  if (itineraries.length === 0) {
+    itineraryContainer.textContent =
+      "Generate a trip to see it here.";
+  } else {
+    itineraries.forEach(item => {
+      const card = document.createElement("article");
+      card.className = "history-card";
+
+      const title = document.createElement("h3");
+      title.textContent = "Trip itinerary";
+
+      const preview = document.createElement("p");
+      preview.textContent = item.text.slice(0, 180) +
+        (item.text.length > 180 ? "…" : "");
+
+      const date = document.createElement("p");
+      date.className = "history-date";
+      date.textContent = item.createdAt
+        ? new Date(item.createdAt).toLocaleString()
+        : "";
+
+      const button = document.createElement("button");
+      button.type = "button";
+      button.textContent = "View Itinerary";
+      button.addEventListener("click", () => {
+        const result =
+          document.querySelector("#plannerResult") ||
+          document.querySelector(".planner-result") ||
+          document.querySelector(".generated-result");
+
+        if (result) {
+          result.textContent = item.text;
+          result.scrollIntoView({
+            behavior: "smooth",
+            block: "center"
+          });
+        } else {
+          alert(item.text);
+        }
+      });
+
+      card.append(title, preview, date, button);
+      itineraryContainer.appendChild(card);
+    });
+  }
+}
+
+function clearTripHistory() {
+  if (!confirm("Clear all recently viewed destinations and trip history?")) {
+    return;
+  }
+
+  localStorage.removeItem(TRAVELSPHERE_HISTORY_KEY);
+  localStorage.removeItem(TRAVELSPHERE_RECENT_KEY);
+  renderTravelSphereHistory();
+}
+
+document.addEventListener("DOMContentLoaded", renderTravelSphereHistory);
 }

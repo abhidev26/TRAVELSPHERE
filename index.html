@@ -379,7 +379,35 @@
         </div>
 
     </section>
+    
+<!-- COMMIT 17: TRIP HISTORY -->
+<section class="trip-history-section" id="tripHistorySection">
+  <div class="trip-history-header">
+    <div>
+      <p class="history-eyebrow">YOUR JOURNEY</p>
+      <h2>Trip History</h2>
+      <p>Revisit destinations and itineraries you've explored.</p>
+    </div>
 
+    <button
+      type="button"
+      class="clear-history-btn"
+      onclick="clearTripHistory()"
+    >
+      Clear History
+    </button>
+  </div>
+
+  <div id="recentDestinations" class="history-grid">
+    <p class="history-empty">No recently viewed destinations yet.</p>
+  </div>
+
+  <h3 class="saved-itineraries-title">Recently Generated Itineraries</h3>
+
+  <div id="recentItineraries" class="history-grid">
+    <p class="history-empty">Generate a trip to see it here.</p>
+  </div>
+</section>
 
     <!-- =========================
          Smart Planner
