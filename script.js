@@ -2956,3 +2956,147 @@ function clearTripHistory() {
 
 document.addEventListener("DOMContentLoaded", renderTravelSphereHistory);
 }
+
+/* COMMIT 18: SMART BUDGET CALCULATOR */
+
+(function initializeSmartBudget() {
+  const calculateButton = document.getElementById("calculateTravelBudget");
+
+  if (!calculateButton || calculateButton.dataset.initialized === "true") {
+    return;
+  }
+
+  calculateButton.dataset.initialized = "true";
+
+  const budgetInput = document.getElementById("travelBudgetAmount");
+
+  const expenseIds = [
+    "budgetTransport",
+    "budgetAccommodation",
+    "budgetFood",
+    "budgetActivities",
+    "budgetOther"
+  ];
+
+  const formatINR = amount =>
+    new Intl.NumberFormat("en-IN", {
+      style: "currency",
+      currency: "INR",
+      maximumFractionDigits: 0
+    }).format(amount);
+
+  function calculateBudget() {
+    const budget = Number(budgetInput.value);
+
+    const expenseInputs = expenseIds.map(id =>
+      document.getElementById(id)
+    );
+
+    const hasInvalidExpense = expenseInputs.some(input =>
+      !input ||
+      input.value.trim() === "" ||
+      !Number.isFinite(Number(input.value)) ||
+      Number(input.value) < 0
+    );
+
+    const alertElement = document.getElementById("budgetAlertMessage");
+
+    alertElement.className = "budget-alert-message";
+
+    if (
+      budgetInput.value.trim() === "" ||
+      !Number.isFinite(budget) ||
+      budget <= 0 ||
+      hasInvalidExpense
+    ) {
+      alertElement.textContent =
+        "Enter a total budget above ₹0 and valid, non-negative expenses.";
+      alertElement.classList.add("budget-danger");
+      return;
+    }
+
+    const expenses = expenseInputs.reduce(
+      (sum, input) => sum + Number(input.value),
+      0
+    );
+
+    const remaining = budget - expenses;
+    const percentage = (expenses / budget) * 100;
+
+    document.getElementById("budgetTotalDisplay").textContent =
+      formatINR(budget);
+
+    document.getElementById("budgetExpenseDisplay").textContent =
+      formatINR(expenses);
+
+    document.getElementById("budgetRemainingDisplay").textContent =
+      formatINR(remaining);
+
+    const progressBar = document.getElementById("budgetProgressBar");
+
+    progressBar.style.width = Math.min(percentage, 100) + "%";
+    progressBar.style.background =
+      remaining < 0 ? "#dc2626" :
+      percentage >= 80 ? "#d97706" :
+      "var(--primary)";
+
+    if (remaining < 0) {
+      alertElement.textContent =
+        "Over budget by " + formatINR(Math.abs(remaining)) +
+        ". Consider reducing your estimated expenses.";
+      alertElement.classList.add("budget-danger");
+    } else if (percentage >= 80) {
+      alertElement.textContent =
+        "Budget alert: you've planned to use " +
+        percentage.toFixed(1) +
+        "% of your budget. Remaining: " + formatINR(remaining) + ".";
+      alertElement.classList.add("budget-warning");
+    } else {
+      alertElement.textContent =
+        "You're within budget! You have " +
+        formatINR(remaining) + " remaining.";
+    }
+
+    try {
+      localStorage.setItem("travelsphere_smart_budget", JSON.stringify({
+        budget,
+        expenses: Object.fromEntries(
+          expenseIds.map((id, index) => [
+            id,
+            Number(expenseInputs[index].value)
+          ])
+        ),
+        updatedAt: new Date().toISOString()
+      }));
+    } catch (error) {
+      console.warn("Could not save budget data.", error);
+    }
+  }
+
+  calculateButton.addEventListener("click", calculateBudget);
+
+  try {
+    const saved = JSON.parse(
+      localStorage.getItem("travelsphere_smart_budget") || "null"
+    );
+
+    if (saved && typeof saved === "object") {
+      budgetInput.value = saved.budget ?? "";
+
+      expenseIds.forEach(id => {
+        const input = document.getElementById(id);
+
+        if (input && saved.expenses && saved.expenses[id] !== undefined) {
+          input.value = saved.expenses[id];
+        }
+      });
+
+      if (budgetInput.value !== "") {
+        calculateBudget();
+      }
+    }
+  } catch (error) {
+    console.warn("Could not restore budget data.", error);
+  }
+})();
+

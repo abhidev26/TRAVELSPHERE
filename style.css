@@ -3095,4 +3095,152 @@ footer,
     grid-template-columns: 1fr;
   }
 }
+
+/* COMMIT 18: SMART BUDGET PLANNER */
+
+.smart-budget-section {
+  width: min(1100px, 92%);
+  margin: 60px auto;
+  padding: 30px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--surface);
+  box-shadow: var(--shadow);
+}
+
+.smart-budget-heading {
+  margin-bottom: 25px;
+}
+
+.budget-eyebrow {
+  color: var(--primary);
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 2px;
+}
+
+.smart-budget-heading h2 {
+  margin: 8px 0;
+  color: var(--text);
+  font-size: clamp(26px, 4vw, 36px);
+}
+
+.smart-budget-heading p:last-child {
+  color: var(--muted);
+}
+
+.budget-input-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 18px;
+}
+
+.budget-input-grid label {
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+  color: var(--text);
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.budget-input-grid input {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 13px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--surface-strong);
+  color: var(--text);
+  font: inherit;
+}
+
+.budget-input-grid input:focus {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+}
+
+.budget-calculate-btn {
+  margin-top: 22px;
+  padding: 13px 22px;
+  border: none;
+  border-radius: 11px;
+  background: linear-gradient(135deg, var(--primary), var(--primary-2));
+  color: white;
+  font-weight: 700;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+.budget-calculate-btn:hover {
+  transform: translateY(-2px);
+}
+
+.budget-results {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+  gap: 15px;
+  margin-top: 25px;
+}
+
+.budget-stat {
+  padding: 20px;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  background: var(--surface-strong);
+}
+
+.budget-stat span {
+  display: block;
+  margin-bottom: 10px;
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.budget-stat strong {
+  color: var(--text);
+  font-size: 24px;
+  overflow-wrap: anywhere;
+}
+
+.budget-progress-track {
+  height: 12px;
+  margin-top: 25px;
+  overflow: hidden;
+  border-radius: 20px;
+  background: var(--border);
+}
+
+.budget-progress-fill {
+  width: 0;
+  height: 100%;
+  border-radius: inherit;
+  background: var(--primary);
+  transition: width 0.4s ease;
+}
+
+.budget-alert-message {
+  margin-top: 15px;
+  color: var(--muted);
+  font-weight: 600;
+  line-height: 1.6;
+}
+
+.budget-alert-message.budget-warning {
+  color: #d97706;
+}
+
+.budget-alert-message.budget-danger {
+  color: #dc2626;
+}
+
+@media (max-width: 600px) {
+  .smart-budget-section {
+    padding: 20px;
+  }
+
+  .budget-results {
+    grid-template-columns: 1fr;
+  }
+}
 }
