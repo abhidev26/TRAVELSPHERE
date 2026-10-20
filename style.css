@@ -3243,4 +3243,94 @@ footer,
     grid-template-columns: 1fr;
   }
 }
+
+/* COMMIT 19: CURRENCY CONVERTER */
+
+.currency-section {
+  width: min(900px, 92%);
+  margin: 60px auto;
+}
+
+.currency-card {
+  padding: 28px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--surface);
+  box-shadow: var(--shadow);
+}
+
+.currency-card label {
+  display: block;
+  margin: 16px 0 8px;
+  color: var(--text);
+  font-weight: 600;
+}
+
+.currency-card input,
+.currency-card select {
+  box-sizing: border-box;
+  width: 100%;
+  padding: 13px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--surface-strong);
+  color: var(--text);
+  font: inherit;
+}
+
+.currency-card input:focus,
+.currency-card select:focus {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+}
+
+.currency-swap-btn,
+.currency-convert-btn {
+  margin-top: 18px;
+  padding: 13px 18px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.currency-swap-btn {
+  background: var(--surface-strong);
+  color: var(--text);
+}
+
+.currency-convert-btn {
+  width: 100%;
+  background: linear-gradient(135deg, var(--primary), var(--primary-2));
+  color: #fff;
+}
+
+.currency-swap-btn:hover,
+.currency-convert-btn:hover {
+  filter: brightness(1.08);
+}
+
+.currency-result {
+  margin-top: 24px;
+  padding: 22px;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  background: var(--surface-strong);
+  overflow-wrap: anywhere;
+}
+
+.currency-result p {
+  color: var(--muted);
+}
+
+.currency-result h3 {
+  color: var(--text);
+  font-size: clamp(24px, 4vw, 34px);
+}
+
+@media (max-width: 600px) {
+  .currency-card {
+    padding: 18px;
+  }
+}
 }

@@ -234,11 +234,67 @@
       </p>
     </section>
   </main>
+  
+<!-- COMMIT 19: TRAVEL CURRENCY CONVERTER -->
+<section class="currency-section" id="currencyConverter">
+  <div class="section-title">
+    <p>TRAVEL AROUND THE WORLD</p>
+    <h2>Currency Converter</h2>
+    <p>Estimate your spending in another currency.</p>
+  </div>
+
+  <div class="currency-card">
+    <label for="currencyAmount">Amount</label>
+    <input id="currencyAmount" type="number" min="0.01" step="any" value="1000" placeholder="Enter amount">
+
+    <label for="currencyFrom">From</label>
+    <select id="currencyFrom">
+      <option value="INR">INR — Indian Rupee</option>
+      <option value="USD">USD — US Dollar</option>
+      <option value="EUR">EUR — Euro</option>
+      <option value="GBP">GBP — British Pound</option>
+      <option value="JPY">JPY — Japanese Yen</option>
+      <option value="AED">AED — UAE Dirham</option>
+      <option value="CAD">CAD — Canadian Dollar</option>
+      <option value="AUD">AUD — Australian Dollar</option>
+      <option value="SGD">SGD — Singapore Dollar</option>
+    </select>
+
+    <button type="button" id="swapCurrencies" class="currency-swap-btn">
+      ⇅ Swap Currencies
+    </button>
+
+    <label for="currencyTo">To</label>
+    <select id="currencyTo">
+      <option value="USD">USD — US Dollar</option>
+      <option value="INR">INR — Indian Rupee</option>
+      <option value="EUR">EUR — Euro</option>
+      <option value="GBP">GBP — British Pound</option>
+      <option value="JPY">JPY — Japanese Yen</option>
+      <option value="AED">AED — UAE Dirham</option>
+      <option value="CAD">CAD — Canadian Dollar</option>
+      <option value="AUD">AUD — Australian Dollar</option>
+      <option value="SGD">SGD — Singapore Dollar</option>
+    </select>
+
+    <button type="button" id="convertCurrency" class="currency-convert-btn">
+      Convert Currency
+    </button>
+
+    <div class="currency-result" aria-live="polite">
+      <p>Converted Amount</p>
+      <h3 id="currencyResult">Ready to convert</h3>
+      <p id="currencyRateInfo">Exchange rates are retrieved when you convert.</p>
+      <p id="currencyUpdatedAt"></p>
+    </div>
+  </div>
+</section>
 
   <footer>
     <h3>🌍 TravelSphere</h3>
     <p>Explore more. Plan better. Travel smarter.</p>
     <p>© 2026 TravelSphere. Built for curious travellers.</p>
+    
   </footer>
 
   <script src="script.js"></script>

@@ -3100,3 +3100,115 @@ document.addEventListener("DOMContentLoaded", renderTravelSphereHistory);
   }
 })();
 
+/* COMMIT 19: LIVE CURRENCY CONVERTER */
+
+(function initializeCurrencyConverter() {
+  const amountInput = document.getElementById("currencyAmount");
+  const fromSelect = document.getElementById("currencyFrom");
+  const toSelect = document.getElementById("currencyTo");
+  const convertButton = document.getElementById("convertCurrency");
+  const swapButton = document.getElementById("swapCurrencies");
+  const resultElement = document.getElementById("currencyResult");
+  const rateElement = document.getElementById("currencyRateInfo");
+  const updatedElement = document.getElementById("currencyUpdatedAt");
+
+  if (
+    !amountInput || !fromSelect || !toSelect ||
+    !convertButton || !swapButton ||
+    convertButton.dataset.initialized === "true"
+  ) return;
+
+  convertButton.dataset.initialized = "true";
+
+  const formatMoney = (amount, currency) =>
+    new Intl.NumberFormat("en-US", {
+      style: "currency",
+      currency,
+      maximumFractionDigits: currency === "JPY" ? 2 : 4
+    }).format(amount);
+
+  async function convertCurrency() {
+    const amount = Number(amountInput.value);
+    const from = fromSelect.value;
+    const to = toSelect.value;
+
+    if (!Number.isFinite(amount) || amount <= 0) {
+      resultElement.textContent = "Enter an amount greater than zero.";
+      rateElement.textContent = "";
+      updatedElement.textContent = "";
+      return;
+    }
+
+    convertButton.disabled = true;
+    convertButton.textContent = "Converting…";
+    resultElement.textContent = "Fetching exchange rate…";
+    rateElement.textContent = "";
+    updatedElement.textContent = "";
+
+    try {
+      if (from === to) {
+        resultElement.textContent = formatMoney(amount, to);
+        rateElement.textContent = `1 ${from} = 1 ${to}`;
+        updatedElement.textContent = "Same-currency conversion.";
+        return;
+      }
+
+      const response = await fetch(
+        `https://open.er-api.com/v6/latest/${encodeURIComponent(from)}`
+      );
+
+      if (!response.ok) {
+        throw new Error("Exchange-rate service is unavailable.");
+      }
+
+      const data = await response.json();
+
+      if (
+        data.result !== "success" ||
+        !data.rates ||
+        !Number.isFinite(data.rates[to])
+      ) {
+        throw new Error("A valid exchange rate was not returned.");
+      }
+
+      const rate = data.rates[to];
+      const converted = amount * rate;
+
+      resultElement.textContent = formatMoney(converted, to);
+      rateElement.textContent =
+        `1 ${from} = ${rate.toLocaleString("en-US", {
+          maximumFractionDigits: 6
+        })} ${to}`;
+
+      updatedElement.textContent = data.time_last_update_utc
+        ? `Rate data updated: ${data.time_last_update_utc}`
+        : "Check the provider for the latest rate timestamp.";
+    } catch (error) {
+      resultElement.textContent = "Conversion unavailable";
+      rateElement.textContent =
+        "Check your internet connection and try again.";
+      updatedElement.textContent =
+        "No estimated rate has been substituted.";
+      console.error("Currency conversion error:", error);
+    } finally {
+      convertButton.disabled = false;
+      convertButton.textContent = "Convert Currency";
+    }
+  }
+
+  swapButton.addEventListener("click", () => {
+    const previousFrom = fromSelect.value;
+    fromSelect.value = toSelect.value;
+    toSelect.value = previousFrom;
+  });
+
+  convertButton.addEventListener("click", convertCurrency);
+
+  amountInput.addEventListener("keydown", event => {
+    if (event.key === "Enter") convertCurrency();
+  });
+
+  convertCurrency();
+})();
+
+
