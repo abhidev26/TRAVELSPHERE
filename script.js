@@ -3372,5 +3372,557 @@ document.addEventListener("DOMContentLoaded", renderTravelSphereHistory);
 
   loadForecast();
 })();
+/* =========================================
+   COMMIT 21 — ULTIMATE TRAVEL UPGRADE
+   Map, itinerary, packing, accessibility
+========================================= */
+
+(() => {
+  "use strict";
+
+  const root = document.getElementById("travelExperienceUpgrade");
+  if (!root || root.dataset.initialized === "true") return;
+  root.dataset.initialized = "true";
+
+  const $ = (id) => document.getElementById(id);
+
+  // Safe localStorage helpers: the website still works if storage is blocked.
+  function readStorage(key, fallback) {
+    try {
+      const value = localStorage.getItem(key);
+      return value ? JSON.parse(value) : fallback;
+    } catch {
+      return fallback;
+    }
+  }
+
+  function writeStorage(key, value) {
+    try {
+      localStorage.setItem(key, JSON.stringify(value));
+      return true;
+    } catch {
+      return false;
+    }
+  }
+
+  function setStatus(element, message) {
+    if (element) element.textContent = message;
+  }
+
+  /* -----------------------------------------
+     1. INTERACTIVE DESTINATION MAP
+  ----------------------------------------- */
+
+  const destinations = {
+    Dubai: {
+      name: "Dubai, UAE",
+      lat: 25.2048,
+      lng: 55.2708
+    },
+    Paris: {
+      name: "Paris, France",
+      lat: 48.8566,
+      lng: 2.3522
+    },
+    Tokyo: {
+      name: "Tokyo, Japan",
+      lat: 35.6762,
+      lng: 139.6503
+    },
+    Zurich: {
+      name: "Zurich, Switzerland",
+      lat: 47.3769,
+      lng: 8.5417
+    },
+    Mangalore: {
+      name: "Mangalore, India",
+      lat: 12.9141,
+      lng: 74.856
+    },
+    Bengaluru: {
+      name: "Bengaluru, India",
+      lat: 12.9716,
+      lng: 77.5946
+    }
+  };
+
+  const mapElement = $("tsDestinationMap");
+  const mapSelect = $("tsMapDestination");
+  const mapButton = $("tsLocateDestination");
+  const mapStatus = $("tsMapStatus");
+
+  let mapInstance = null;
+  let mapMarkers = {};
+  let mapLoadPromise = null;
+
+  function loadLeaflet() {
+    if (window.L) return Promise.resolve(window.L);
+    if (mapLoadPromise) return mapLoadPromise;
+
+    mapLoadPromise = new Promise((resolve, reject) => {
+      const existingLink = document.querySelector(
+        'link[data-ts-leaflet="true"]'
+      );
+
+      const css = existingLink || document.createElement("link");
+      css.rel = "stylesheet";
+      css.href = "https://unpkg.com/leaflet@1.9.4/dist/leaflet.css";
+      css.dataset.tsLeaflet = "true";
+
+      if (!existingLink) {
+        document.head.appendChild(css);
+      }
+
+      const script = document.createElement("script");
+      script.src = "https://unpkg.com/leaflet@1.9.4/dist/leaflet.js";
+      script.async = true;
+
+      script.onload = () => {
+        if (window.L) resolve(window.L);
+        else reject(new Error("The map library could not be initialized."));
+      };
+
+      script.onerror = () => {
+        mapLoadPromise = null;
+        script.remove();
+        reject(new Error("Could not load the map. Check your connection."));
+      };
+
+      document.head.appendChild(script);
+    });
+
+    return mapLoadPromise;
+  }
+
+  function focusDestination(name) {
+    const destination = destinations[name];
+
+    if (!destination) {
+      setStatus(mapStatus, "Please select a valid destination.");
+      return;
+    }
+
+    if (!mapInstance) {
+      setStatus(mapStatus, "The interactive map is not ready yet.");
+      return;
+    }
+
+    mapInstance.flyTo(
+      [destination.lat, destination.lng],
+      10,
+      { duration: 0.8 }
+    );
+
+    if (mapMarkers[name]) {
+      mapMarkers[name].openPopup();
+    }
+
+    setStatus(mapStatus, `Showing ${destination.name} on the map.`);
+  }
+
+  async function initializeMap() {
+    if (!mapElement) return;
+
+    try {
+      setStatus(mapStatus, "Loading the interactive map...");
+
+      const L = await loadLeaflet();
+
+      if (!mapInstance) {
+        mapInstance = L.map(mapElement).setView([20, 0], 2);
+
+        L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
+          maxZoom: 19,
+          attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        }).addTo(mapInstance);
+
+        Object.entries(destinations).forEach(([key, destination]) => {
+          const marker = L.marker([
+            destination.lat,
+            destination.lng
+          ]).addTo(mapInstance);
+
+          marker.bindPopup(
+            `<strong>${destination.name}</strong>`
+          );
+
+          mapMarkers[key] = marker;
+        });
+      }
+
+      // Important when the map was initially rendered inside a hidden area.
+      requestAnimationFrame(() => {
+        mapInstance.invalidateSize();
+      });
+
+      setStatus(mapStatus, "Map ready. Select a destination to explore.");
+    } catch (error) {
+      setStatus(
+        mapStatus,
+        error.message || "The map could not be loaded."
+      );
+    }
+  }
+
+  mapButton?.addEventListener("click", () => {
+    focusDestination(mapSelect?.value);
+  });
+
+  mapSelect?.addEventListener("change", () => {
+    focusDestination(mapSelect.value);
+  });
+
+  initializeMap();
+
+  /* -----------------------------------------
+     2. DAY-BY-DAY ITINERARY PLANNER
+  ----------------------------------------- */
+
+  const itineraryForm = $("tsItineraryForm");
+  const itineraryOutput = $("tsItineraryOutput");
+  const itineraryStatus = $("tsItineraryStatus");
+
+  const itinerarySuggestions = {
+    balanced: [
+      ["Explore the city centre", "Visit a major landmark", "Enjoy a local dinner"],
+      ["Discover a cultural attraction", "Explore a popular neighbourhood", "Relax at a scenic spot"],
+      ["Visit a local market", "Choose a memorable activity", "Enjoy a relaxed evening"]
+    ],
+    culture: [
+      ["Visit a historic landmark", "Explore a museum", "Try local cuisine"],
+      ["Discover local architecture", "Visit a cultural attraction", "Explore a heritage district"],
+      ["Browse an artisan market", "Learn about local traditions", "Enjoy a cultural evening"]
+    ],
+    nature: [
+      ["Explore a nearby park", "Enjoy a scenic walk", "Watch the sunset"],
+      ["Plan an outdoor excursion", "Visit a natural viewpoint", "Relax in a green space"],
+      ["Explore a nature trail", "Enjoy outdoor photography", "Rest before departure"]
+    ],
+    relaxed: [
+      ["Enjoy a slow morning", "Explore a nearby attraction", "Relax at a cafe"],
+      ["Visit one favourite landmark", "Enjoy a leisurely lunch", "Explore at your own pace"],
+      ["Browse local shops", "Enjoy a quiet afternoon", "Prepare for the next day"]
+    ],
+    food: [
+      ["Try a local breakfast", "Explore a food market", "Enjoy a regional dinner"],
+      ["Discover a local speciality", "Visit a popular cafe", "Try a traditional dish"],
+      ["Explore street food", "Visit a neighbourhood market", "Choose a favourite restaurant"]
+    ]
+  };
+
+  let currentItinerary = null;
+
+  function buildItinerary(destination, dayCount, style) {
+    const suggestions =
+      itinerarySuggestions[style] || itinerarySuggestions.balanced;
+
+    return Array.from({ length: dayCount }, (_, index) => {
+      const activities = suggestions[index % suggestions.length];
+
+      return {
+        day: index + 1,
+        title: `Day ${index + 1} in ${destination}`,
+        activities: [...activities]
+      };
+    });
+  }
+
+  function renderItinerary(days) {
+    if (!itineraryOutput) return;
+
+    const fragment = document.createDocumentFragment();
+
+    days.forEach((day) => {
+      const card = document.createElement("article");
+      card.className = "ts-day-card";
+
+      const heading = document.createElement("h3");
+      heading.textContent = day.title;
+
+      const list = document.createElement("ul");
+
+      day.activities.forEach((activity) => {
+        const item = document.createElement("li");
+        item.textContent = activity;
+        list.appendChild(item);
+      });
+
+      card.append(heading, list);
+      fragment.appendChild(card);
+    });
+
+    itineraryOutput.replaceChildren(fragment);
+  }
+
+  itineraryForm?.addEventListener("submit", (event) => {
+    event.preventDefault();
+
+    const destination = $("tsItineraryDestination")?.value.trim();
+    const days = Number($("tsItineraryDays")?.value);
+    const style = $("tsItineraryStyle")?.value || "balanced";
+
+    if (!destination || !Number.isInteger(days) || days < 1 || days > 14) {
+      setStatus(
+        itineraryStatus,
+        "Enter a destination and choose between 1 and 14 days."
+      );
+      return;
+    }
+
+    currentItinerary = {
+      destination,
+      days: buildItinerary(destination, days, style),
+      style,
+      updatedAt: new Date().toISOString()
+    };
+
+    renderItinerary(currentItinerary.days);
+    setStatus(
+      itineraryStatus,
+      `Created a ${days}-day suggested itinerary for ${destination}. Customize activities to suit your plans.`
+    );
+  });
+
+  $("tsSaveItinerary")?.addEventListener("click", () => {
+    if (!currentItinerary) {
+      setStatus(itineraryStatus, "Create an itinerary before saving.");
+      return;
+    }
+
+    const saved = readStorage("travelsphere_advanced_itineraries", []);
+
+    const updated = [
+      currentItinerary,
+      ...saved.filter(
+        (trip) => trip.destination !== currentItinerary.destination
+      )
+    ].slice(0, 20);
+
+    const success = writeStorage("travelsphere_advanced_itineraries", updated);
+
+    setStatus(
+      itineraryStatus,
+      success
+        ? "Itinerary saved in this browser."
+        : "Could not save the itinerary. Check your browser storage settings."
+    );
+  });
+
+  $("tsExportItinerary")?.addEventListener("click", () => {
+    if (!currentItinerary) {
+      setStatus(itineraryStatus, "Create an itinerary before downloading.");
+      return;
+    }
+
+    const text = [
+      `TravelSphere Itinerary: ${currentItinerary.destination}`,
+      `Travel style: ${currentItinerary.style}`,
+      "",
+      ...currentItinerary.days.flatMap((day) => [
+        day.title,
+        ...day.activities.map((activity) => `- ${activity}`),
+        ""
+      ])
+    ].join("\n");
+
+    const blob = new Blob([text], {
+      type: "text/plain;charset=utf-8"
+    });
+
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+
+    link.href = url;
+    link.download =
+      `travelsphere-${currentItinerary.destination
+        .toLowerCase()
+        .replace(/[^a-z0-9]+/g, "-")}-itinerary.txt`;
+
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+    URL.revokeObjectURL(url);
+
+    setStatus(itineraryStatus, "Your itinerary download has started.");
+  });
+
+  /* -----------------------------------------
+     3. PACKING CHECKLIST
+  ----------------------------------------- */
+
+  const packingKey = "travelsphere_commit21_packing";
+
+  const defaultPackingItems = [
+    { id: "passport", text: "Passport or identification", packed: false },
+    { id: "tickets", text: "Tickets and booking details", packed: false },
+    { id: "wallet", text: "Wallet, cards and cash", packed: false },
+    { id: "phone", text: "Phone and charger", packed: false },
+    { id: "clothes", text: "Clothing and comfortable shoes", packed: false },
+    { id: "toiletries", text: "Toiletries and personal essentials", packed: false },
+    { id: "medicine", text: "Necessary medication", packed: false },
+    { id: "insurance", text: "Travel insurance details", packed: false }
+  ];
+
+  let packingItems = readStorage(packingKey, null);
+
+  if (!Array.isArray(packingItems)) {
+    packingItems = defaultPackingItems.map((item) => ({ ...item }));
+  }
+
+  function savePackingItems() {
+    const success = writeStorage(packingKey, packingItems);
+
+    if (!success) {
+      setStatus(
+        $("tsPackingProgressText"),
+        "Browser storage is unavailable; progress may not persist."
+      );
+    }
+
+    return success;
+  }
+
+  function renderPackingList() {
+    const list = $("tsPackingList");
+    if (!list) return;
+
+    const fragment = document.createDocumentFragment();
+    let packedCount = 0;
+
+    packingItems.forEach((item) => {
+      if (item.packed) packedCount++;
+
+      const row = document.createElement("div");
+      row.className = `ts-packing-item${item.packed ? " is-packed" : ""}`;
+
+      const checkbox = document.createElement("input");
+      checkbox.type = "checkbox";
+      checkbox.checked = Boolean(item.packed);
+      checkbox.id = `ts-pack-${item.id}`;
+
+      const label = document.createElement("label");
+      label.htmlFor = checkbox.id;
+      label.textContent = item.text;
+
+      checkbox.addEventListener("change", () => {
+        item.packed = checkbox.checked;
+        savePackingItems();
+        renderPackingList();
+      });
+
+      const removeButton = document.createElement("button");
+      removeButton.type = "button";
+      removeButton.textContent = "×";
+      removeButton.setAttribute("aria-label", `Remove ${item.text}`);
+
+      removeButton.addEventListener("click", () => {
+        packingItems = packingItems.filter((entry) => entry.id !== item.id);
+        savePackingItems();
+        renderPackingList();
+      });
+
+      row.append(checkbox, label, removeButton);
+      fragment.appendChild(row);
+    });
+
+    list.replaceChildren(fragment);
+
+    const total = packingItems.length;
+    const percent = total ? Math.round((packedCount / total) * 100) : 0;
+
+    const progressBar = $("tsPackingProgressBar");
+    if (progressBar) {
+      progressBar.style.width = `${percent}%`;
+      progressBar.setAttribute("role", "progressbar");
+      progressBar.setAttribute("aria-valuemin", "0");
+      progressBar.setAttribute("aria-valuemax", "100");
+      progressBar.setAttribute("aria-valuenow", String(percent));
+      progressBar.setAttribute("aria-label", "Packing checklist completion");
+    }
+
+    setStatus(
+      $("tsPackingProgressText"),
+      `${packedCount} of ${total} items packed (${percent}%).`
+    );
+  }
+
+  $("tsPackingForm")?.addEventListener("submit", (event) => {
+    event.preventDefault();
+
+    const input = $("tsNewPackingItem");
+    const text = input?.value.trim();
+
+    if (!text) return;
+
+    packingItems.push({
+      id: `custom-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`,
+      text,
+      packed: false
+    });
+
+    savePackingItems();
+    renderPackingList();
+    input.value = "";
+    input.focus();
+  });
+
+  $("tsResetPacking")?.addEventListener("click", () => {
+    packingItems = defaultPackingItems.map((item) => ({ ...item }));
+    savePackingItems();
+    renderPackingList();
+  });
+
+  renderPackingList();
+
+  /* -----------------------------------------
+     4. ACCESSIBILITY PREFERENCES
+  ----------------------------------------- */
+
+  const accessibilityKey = "travelsphere_commit21_accessibility";
+
+  const savedAccessibility = readStorage(accessibilityKey, {
+    largeText: false,
+    reducedMotion: false
+  });
+
+  function applyAccessibility() {
+    root.classList.toggle("ts-large-text", savedAccessibility.largeText);
+    root.classList.toggle(
+      "ts-reduced-motion",
+      savedAccessibility.reducedMotion
+    );
+
+    const motionToggle = $("tsReduceMotion");
+    if (motionToggle) {
+      motionToggle.checked = savedAccessibility.reducedMotion;
+    }
+
+    writeStorage(accessibilityKey, savedAccessibility);
+  }
+
+  $("tsTextLarger")?.addEventListener("click", () => {
+    savedAccessibility.largeText = true;
+    applyAccessibility();
+  });
+
+  $("tsTextSmaller")?.addEventListener("click", () => {
+    savedAccessibility.largeText = false;
+    applyAccessibility();
+  });
+
+  $("tsResetAccessibility")?.addEventListener("click", () => {
+    savedAccessibility.largeText = false;
+    savedAccessibility.reducedMotion = false;
+    applyAccessibility();
+  });
+
+  $("tsReduceMotion")?.addEventListener("change", (event) => {
+    savedAccessibility.reducedMotion = event.target.checked;
+    applyAccessibility();
+  });
+
+  applyAccessibility();
+
+})();
 
 

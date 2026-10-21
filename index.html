@@ -7,6 +7,29 @@
   <meta name="theme-color" content="#0b1020">
   <title>TravelSphere | Smart Travel Planner</title>
   <link rel="stylesheet" href="style.css">
+  
+  <!-- COMMIT 21: SEO & Social Sharing -->
+<meta
+  name="description"
+  content="Explore destinations, plan day-by-day itineraries, check travel weather, manage your budget, and prepare for your next adventure with TravelSphere."
+/>
+<meta name="robots" content="index, follow" />
+<meta name="theme-color" content="#111827" />
+
+<meta property="og:type" content="website" />
+<meta property="og:title" content="TravelSphere | Explore Beyond Boundaries" />
+<meta
+  property="og:description"
+  content="Discover destinations, plan trips, and organize your next adventure with TravelSphere."
+/>
+<meta property="og:image" content="https://placehold.co/1200x630/111827/FFFFFF?text=TravelSphere" />
+
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="TravelSphere | Explore Beyond Boundaries" />
+<meta
+  name="twitter:description"
+  content="Your destination discovery and travel planning companion."
+/>
 </head>
 <body>
 
@@ -322,6 +345,227 @@
     Forecast provided by Open-Meteo. Weather conditions may change.
   </p>
 </section>
+<!-- COMMIT 21: Ultimate Travel Experience Upgrade -->
+<main id="travelExperienceUpgrade">
+
+  <!-- Interactive Map -->
+  <section class="ts-upgrade-section" id="destinationMapSection">
+    <div class="ts-section-heading">
+      <span class="ts-eyebrow">DISCOVER THE WORLD</span>
+      <h2>Explore Destinations</h2>
+      <p>Choose a destination and explore its location on the map.</p>
+    </div>
+
+    <div class="ts-map-toolbar">
+      <label for="tsMapDestination">Choose a destination</label>
+      <select id="tsMapDestination">
+        <option value="Dubai">Dubai, UAE</option>
+        <option value="Paris">Paris, France</option>
+        <option value="Tokyo">Tokyo, Japan</option>
+        <option value="Zurich">Zurich, Switzerland</option>
+        <option value="Mangalore">Mangalore, India</option>
+        <option value="Bengaluru">Bengaluru, India</option>
+      </select>
+
+      <button type="button" id="tsLocateDestination">
+        Show on Map
+      </button>
+    </div>
+
+    <div
+      id="tsDestinationMap"
+      class="ts-destination-map"
+      role="region"
+      aria-label="Interactive map of travel destinations"
+    ></div>
+
+    <p id="tsMapStatus" class="ts-status" role="status">
+      Loading interactive map...
+    </p>
+  </section>
+
+  <!-- Day-by-Day Itinerary -->
+  <section class="ts-upgrade-section" id="dayPlannerSection">
+    <div class="ts-section-heading">
+      <span class="ts-eyebrow">MAKE EVERY DAY COUNT</span>
+      <h2>Day-by-Day Itinerary</h2>
+      <p>Build a simple daily travel plan for your next trip.</p>
+    </div>
+
+    <form id="tsItineraryForm" class="ts-itinerary-form">
+      <div class="ts-form-field">
+        <label for="tsItineraryDestination">Destination</label>
+        <input
+          id="tsItineraryDestination"
+          type="text"
+          placeholder="e.g. Paris"
+          maxlength="80"
+          required
+        />
+      </div>
+
+      <div class="ts-form-field">
+        <label for="tsItineraryDays">Number of days</label>
+        <input
+          id="tsItineraryDays"
+          type="number"
+          min="1"
+          max="14"
+          value="3"
+          required
+        />
+      </div>
+
+      <div class="ts-form-field">
+        <label for="tsItineraryStyle">Travel style</label>
+        <select id="tsItineraryStyle">
+          <option value="balanced">Balanced adventure</option>
+          <option value="culture">Culture and history</option>
+          <option value="nature">Nature and outdoors</option>
+          <option value="relaxed">Relaxed holiday</option>
+          <option value="food">Food and local experiences</option>
+        </select>
+      </div>
+
+      <button class="ts-primary-button" type="submit">
+        Create My Itinerary
+      </button>
+    </form>
+
+    <div id="tsItineraryOutput" class="ts-itinerary-output" aria-live="polite">
+      <p class="ts-muted">Your itinerary will appear here.</p>
+    </div>
+
+    <div class="ts-action-row">
+      <button type="button" id="tsSaveItinerary" class="ts-secondary-button">
+        Save Itinerary
+      </button>
+      <button type="button" id="tsExportItinerary" class="ts-secondary-button">
+        Download Itinerary
+      </button>
+    </div>
+
+    <p id="tsItineraryStatus" class="ts-status" role="status"></p>
+  </section>
+
+  <!-- Packing Checklist -->
+  <section class="ts-upgrade-section" id="packingChecklistSection">
+    <div class="ts-section-heading">
+      <span class="ts-eyebrow">PACK WITH CONFIDENCE</span>
+      <h2>Travel Packing Checklist</h2>
+      <p>Check items off as you prepare. Your progress is saved in this browser.</p>
+    </div>
+
+    <form id="tsPackingForm" class="ts-packing-form">
+      <label class="ts-sr-only" for="tsNewPackingItem">
+        Add a packing item
+      </label>
+      <input
+        id="tsNewPackingItem"
+        type="text"
+        maxlength="100"
+        placeholder="Add your own item..."
+        required
+      />
+      <button type="submit" class="ts-primary-button">Add Item</button>
+    </form>
+
+    <div class="ts-packing-progress">
+      <div class="ts-progress-track">
+        <div id="tsPackingProgressBar" class="ts-progress-fill"></div>
+      </div>
+      <p id="tsPackingProgressText" class="ts-status" aria-live="polite">
+        0 items packed
+      </p>
+    </div>
+
+    <div id="tsPackingList" class="ts-packing-list"></div>
+
+    <button type="button" id="tsResetPacking" class="ts-secondary-button">
+      Reset Checklist
+    </button>
+  </section>
+
+  <!-- Safety Information -->
+  <section class="ts-upgrade-section" id="travelSafetySection">
+    <div class="ts-section-heading">
+      <span class="ts-eyebrow">TRAVEL RESPONSIBLY</span>
+      <h2>Travel Safety Essentials</h2>
+      <p>Prepare before departure and keep important information accessible.</p>
+    </div>
+
+    <div class="ts-safety-grid">
+      <article class="ts-info-card">
+        <span class="ts-info-icon" aria-hidden="true">🛂</span>
+        <h3>Documents</h3>
+        <p>Check passport validity, visa requirements, tickets, and travel insurance.</p>
+      </article>
+
+      <article class="ts-info-card">
+        <span class="ts-info-icon" aria-hidden="true">🏥</span>
+        <h3>Health</h3>
+        <p>Carry necessary medication, prescriptions, and relevant medical information.</p>
+      </article>
+
+      <article class="ts-info-card">
+        <span class="ts-info-icon" aria-hidden="true">📱</span>
+        <h3>Stay Connected</h3>
+        <p>Save offline maps, accommodation details, and a trusted contact's number.</p>
+      </article>
+
+      <article class="ts-info-card">
+        <span class="ts-info-icon" aria-hidden="true">🔒</span>
+        <h3>Personal Security</h3>
+        <p>Protect valuables, use trusted transport, and check local travel advisories.</p>
+      </article>
+    </div>
+
+    <div class="ts-emergency-panel">
+      <h3>Emergency Information</h3>
+      <p>
+        Emergency numbers vary by country and region. Verify the official local
+        emergency number and nearest embassy or consulate before travelling.
+      </p>
+      <a
+        href="https://www.gov.uk/foreign-travel-advice"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        Check official foreign travel advice
+      </a>
+      <p class="ts-muted">
+        This is general travel information, not a substitute for official local guidance.
+      </p>
+    </div>
+  </section>
+
+  <!-- Accessibility Controls -->
+  <section class="ts-upgrade-section" id="accessibilitySection">
+    <div class="ts-section-heading">
+      <span class="ts-eyebrow">DESIGNED FOR EVERY TRAVELLER</span>
+      <h2>Accessibility Preferences</h2>
+      <p>Adjust text size or reduce decorative motion on this page.</p>
+    </div>
+
+    <div class="ts-accessibility-controls">
+      <button type="button" id="tsTextSmaller" class="ts-secondary-button">
+        A− Smaller text
+      </button>
+      <button type="button" id="tsTextLarger" class="ts-secondary-button">
+        A+ Larger text
+      </button>
+      <button type="button" id="tsResetAccessibility" class="ts-secondary-button">
+        Reset display
+      </button>
+    </div>
+
+    <label class="ts-motion-option">
+      <input type="checkbox" id="tsReduceMotion" />
+      Reduce decorative animations
+    </label>
+  </section>
+
+</main>
 
   <footer>
     <h3>🌍 TravelSphere</h3>

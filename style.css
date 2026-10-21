@@ -3494,3 +3494,378 @@ footer,
   }
 }
 }
+/* =========================================
+   COMMIT 21 — ULTIMATE TRAVEL UPGRADE
+========================================= */
+
+#travelExperienceUpgrade {
+  --ts-accent: var(--primary, #6366f1);
+  --ts-text: var(--text, #f8fafc);
+  --ts-muted: var(--muted, #94a3b8);
+  --ts-surface: var(--surface, #151b2b);
+  --ts-border: var(--border, rgba(148, 163, 184, 0.25));
+  --ts-radius: 20px;
+
+  color: var(--ts-text);
+  font-size: 16px;
+}
+
+#travelExperienceUpgrade *,
+#travelExperienceUpgrade *::before,
+#travelExperienceUpgrade *::after {
+  box-sizing: border-box;
+}
+
+.ts-upgrade-section {
+  width: min(1120px, 92%);
+  margin: 64px auto;
+  padding: clamp(20px, 4vw, 36px);
+  border: 1px solid var(--ts-border);
+  border-radius: var(--ts-radius);
+  background: var(--ts-surface);
+  box-shadow: var(--shadow, 0 12px 36px rgba(0, 0, 0, 0.12));
+  scroll-margin-top: 90px;
+}
+
+.ts-section-heading {
+  margin-bottom: 26px;
+}
+
+.ts-eyebrow {
+  color: var(--ts-accent);
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 2.5px;
+}
+
+.ts-section-heading h2 {
+  margin: 10px 0;
+  color: var(--ts-text);
+  font-size: clamp(25px, 4vw, 36px);
+  line-height: 1.2;
+}
+
+.ts-section-heading p,
+.ts-muted,
+.ts-status {
+  color: var(--ts-muted);
+  line-height: 1.7;
+}
+
+.ts-map-toolbar,
+.ts-action-row,
+.ts-accessibility-controls {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.ts-map-toolbar label {
+  font-weight: 700;
+}
+
+.ts-map-toolbar select,
+.ts-form-field input,
+.ts-form-field select,
+.ts-packing-form input {
+  width: 100%;
+  min-height: 46px;
+  padding: 12px 14px;
+  border: 1px solid var(--ts-border);
+  border-radius: 10px;
+  background: var(--bg, #0f172a);
+  color: var(--ts-text);
+  font: inherit;
+}
+
+.ts-map-toolbar select {
+  flex: 1;
+  min-width: 180px;
+}
+
+.ts-destination-map {
+  z-index: 0;
+  width: 100%;
+  min-height: 390px;
+  border: 1px solid var(--ts-border);
+  border-radius: 16px;
+  overflow: hidden;
+  background: var(--bg, #e5e7eb);
+}
+
+.ts-primary-button,
+.ts-secondary-button,
+.ts-map-toolbar button {
+  display: inline-flex;
+  min-height: 44px;
+  align-items: center;
+  justify-content: center;
+  padding: 11px 17px;
+  border: 1px solid var(--ts-border);
+  border-radius: 11px;
+  font: inherit;
+  font-weight: 700;
+  text-align: center;
+  cursor: pointer;
+  transition: transform 0.2s ease, opacity 0.2s ease;
+}
+
+.ts-primary-button,
+.ts-map-toolbar button {
+  background: var(--ts-accent);
+  color: #fff;
+}
+
+.ts-secondary-button {
+  background: transparent;
+  color: var(--ts-text);
+}
+
+.ts-primary-button:hover,
+.ts-secondary-button:hover,
+.ts-map-toolbar button:hover {
+  transform: translateY(-2px);
+}
+
+.ts-primary-button:focus-visible,
+.ts-secondary-button:focus-visible,
+.ts-map-toolbar button:focus-visible,
+#travelExperienceUpgrade input:focus-visible,
+#travelExperienceUpgrade select:focus-visible {
+  outline: 3px solid var(--ts-accent);
+  outline-offset: 3px;
+}
+
+.ts-itinerary-form {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  align-items: end;
+  gap: 16px;
+}
+
+.ts-form-field {
+  display: grid;
+  gap: 8px;
+}
+
+.ts-form-field label {
+  font-weight: 700;
+}
+
+.ts-itinerary-form > button {
+  grid-column: 1 / -1;
+}
+
+.ts-itinerary-output {
+  display: grid;
+  gap: 14px;
+  margin: 24px 0;
+}
+
+.ts-day-card,
+.ts-info-card {
+  padding: 20px;
+  border: 1px solid var(--ts-border);
+  border-radius: 15px;
+  background: var(--bg-soft, rgba(148, 163, 184, 0.06));
+}
+
+.ts-day-card h3,
+.ts-info-card h3 {
+  margin-top: 0;
+}
+
+.ts-day-card p,
+.ts-info-card p {
+  color: var(--ts-muted);
+  line-height: 1.7;
+}
+
+.ts-day-card ul {
+  padding-left: 22px;
+  line-height: 1.9;
+}
+
+.ts-packing-form {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.ts-packing-form input {
+  flex: 1;
+  min-width: 180px;
+}
+
+.ts-packing-progress {
+  margin: 22px 0;
+}
+
+.ts-progress-track {
+  width: 100%;
+  height: 10px;
+  overflow: hidden;
+  border-radius: 99px;
+  background: var(--ts-border);
+}
+
+.ts-progress-fill {
+  width: 0;
+  height: 100%;
+  border-radius: inherit;
+  background: var(--ts-accent);
+  transition: width 0.2s ease;
+}
+
+.ts-packing-list {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+  margin: 20px 0;
+}
+
+.ts-packing-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 14px;
+  border: 1px solid var(--ts-border);
+  border-radius: 12px;
+  overflow-wrap: anywhere;
+}
+
+.ts-packing-item input {
+  width: 18px;
+  height: 18px;
+  flex: 0 0 auto;
+  margin-top: 3px;
+  accent-color: var(--ts-accent);
+}
+
+.ts-packing-item label {
+  flex: 1;
+  line-height: 1.5;
+  cursor: pointer;
+}
+
+.ts-packing-item button {
+  border: none;
+  background: transparent;
+  color: var(--ts-muted);
+  cursor: pointer;
+  font-size: 18px;
+}
+
+.ts-packing-item.is-packed label {
+  text-decoration: line-through;
+  opacity: 0.65;
+}
+
+.ts-safety-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.ts-info-icon {
+  display: block;
+  margin-bottom: 10px;
+  font-size: 28px;
+}
+
+.ts-emergency-panel {
+  margin-top: 20px;
+  padding: 22px;
+  border: 1px solid var(--ts-border);
+  border-radius: 15px;
+}
+
+.ts-emergency-panel a {
+  color: var(--ts-accent);
+  text-underline-offset: 4px;
+  overflow-wrap: anywhere;
+}
+
+.ts-emergency-panel p {
+  line-height: 1.7;
+}
+
+.ts-motion-option {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 16px;
+  cursor: pointer;
+}
+
+.ts-motion-option input {
+  width: 18px;
+  height: 18px;
+}
+
+.ts-sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+#travelExperienceUpgrade.ts-large-text {
+  font-size: 19px;
+}
+
+#travelExperienceUpgrade.ts-large-text .ts-section-heading p,
+#travelExperienceUpgrade.ts-large-text .ts-day-card,
+#travelExperienceUpgrade.ts-large-text .ts-info-card {
+  line-height: 1.8;
+}
+
+#travelExperienceUpgrade.ts-reduced-motion *,
+#travelExperienceUpgrade.ts-reduced-motion *::before,
+#travelExperienceUpgrade.ts-reduced-motion *::after {
+  scroll-behavior: auto !important;
+  animation: none !important;
+  transition: none !important;
+}
+
+@media (max-width: 760px) {
+  .ts-itinerary-form {
+    grid-template-columns: 1fr;
+  }
+
+  .ts-packing-list,
+  .ts-safety-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .ts-destination-map {
+    min-height: 320px;
+  }
+
+  .ts-map-toolbar {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .ts-map-toolbar select,
+  .ts-map-toolbar button {
+    width: 100%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  #travelExperienceUpgrade *,
+  #travelExperienceUpgrade *::before,
+  #travelExperienceUpgrade *::after {
+    animation: none !important;
+    transition: none !important;
+    scroll-behavior: auto !important;
+  }
+}
