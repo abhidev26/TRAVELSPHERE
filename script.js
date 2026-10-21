@@ -3210,5 +3210,167 @@ document.addEventListener("DOMContentLoaded", renderTravelSphereHistory);
 
   convertCurrency();
 })();
+/* COMMIT 20: TravelSphere 5-Day Weather Forecast */
+
+(() => {
+  const locations = {
+    Dubai: { latitude: 25.2048, longitude: 55.2708 },
+    Paris: { latitude: 48.8566, longitude: 2.3522 },
+    Tokyo: { latitude: 35.6762, longitude: 139.6503 },
+    Zurich: { latitude: 47.3769, longitude: 8.5417 },
+    Mangalore: { latitude: 12.9141, longitude: 74.856 },
+    Bengaluru: { latitude: 12.9716, longitude: 77.5946 }
+  };
+
+  const weatherTypes = {
+    0: ["☀️", "Clear sky"],
+    1: ["🌤️", "Mainly clear"],
+    2: ["⛅", "Partly cloudy"],
+    3: ["☁️", "Overcast"],
+    45: ["🌫️", "Fog"],
+    48: ["🌫️", "Rime fog"],
+    51: ["🌦️", "Light drizzle"],
+    53: ["🌦️", "Drizzle"],
+    55: ["🌧️", "Heavy drizzle"],
+    56: ["🌧️", "Freezing drizzle"],
+    57: ["🌧️", "Heavy freezing drizzle"],
+    61: ["🌦️", "Light rain"],
+    63: ["🌧️", "Moderate rain"],
+    65: ["🌧️", "Heavy rain"],
+    66: ["🌧️", "Freezing rain"],
+    67: ["🌧️", "Heavy freezing rain"],
+    71: ["🌨️", "Light snowfall"],
+    73: ["❄️", "Snowfall"],
+    75: ["❄️", "Heavy snowfall"],
+    77: ["🌨️", "Snow grains"],
+    80: ["🌦️", "Rain showers"],
+    81: ["🌧️", "Heavy showers"],
+    82: ["⛈️", "Violent showers"],
+    85: ["🌨️", "Snow showers"],
+    86: ["❄️", "Heavy snow showers"],
+    95: ["⛈️", "Thunderstorm"],
+    96: ["⛈️", "Thunderstorm with hail"],
+    99: ["⛈️", "Severe thunderstorm"]
+  };
+
+  const select = document.getElementById("weatherDestination");
+  const cards = document.getElementById("weatherCards");
+  const status = document.getElementById("weatherStatus");
+  const refreshButton = document.getElementById("refreshWeather");
+
+  if (!select || !cards || !status || !refreshButton) return;
+
+  function getWeatherDescription(code) {
+    return weatherTypes[code] || ["🌍", "Conditions unavailable"];
+  }
+
+  function formatDay(dateString, index) {
+    if (index === 0) return "Today";
+    if (index === 1) return "Tomorrow";
+
+    // Use UTC to avoid shifting dates across time zones.
+    const date = new Date(`${dateString}T12:00:00Z`);
+
+    return new Intl.DateTimeFormat("en", {
+      weekday: "short",
+      timeZone: "UTC"
+    }).format(date);
+  }
+
+  async function loadForecast() {
+    const destination = select.value;
+    const location = locations[destination];
+
+    if (!location) return;
+
+    refreshButton.disabled = true;
+    refreshButton.textContent = "Loading...";
+    status.textContent = `Getting the forecast for ${destination}...`;
+    cards.replaceChildren();
+
+    const query = new URLSearchParams({
+      latitude: location.latitude,
+      longitude: location.longitude,
+      daily: "weather_code,temperature_2m_max,temperature_2m_min",
+      forecast_days: "5",
+      timezone: "auto"
+    });
+
+    try {
+      const response = await fetch(
+        `https://api.open-meteo.com/v1/forecast?${query}`
+      );
+
+      if (!response.ok) {
+        throw new Error("Weather service is temporarily unavailable.");
+      }
+
+      const data = await response.json();
+      const daily = data.daily;
+
+      if (
+        !daily ||
+        !Array.isArray(daily.time) ||
+        daily.time.length === 0
+      ) {
+        throw new Error("No forecast data was returned.");
+      }
+
+      const fragment = document.createDocumentFragment();
+
+      daily.time.forEach((date, index) => {
+        const [emoji, description] = getWeatherDescription(
+          daily.weather_code[index]
+        );
+
+        const high = Math.round(daily.temperature_2m_max[index]);
+        const low = Math.round(daily.temperature_2m_min[index]);
+
+        const card = document.createElement("article");
+        card.className = "weather-card";
+
+        const day = document.createElement("div");
+        day.className = "weather-day";
+        day.textContent = formatDay(date, index);
+
+        const icon = document.createElement("div");
+        icon.className = "weather-icon";
+        icon.textContent = emoji;
+        icon.setAttribute("aria-hidden", "true");
+
+        const condition = document.createElement("div");
+        condition.className = "weather-condition";
+        condition.textContent = description;
+
+        const temperature = document.createElement("div");
+        temperature.className = "weather-temperature";
+
+        const highText = document.createTextNode(`${high}° `);
+        const lowText = document.createElement("span");
+        lowText.textContent = `${low}°C low`;
+
+        temperature.append(highText, lowText);
+        card.append(day, icon, condition, temperature);
+        fragment.appendChild(card);
+      });
+
+      cards.replaceChildren(fragment);
+      status.textContent = `Showing the 5-day forecast for ${destination}.`;
+    } catch (error) {
+      status.textContent =
+        error.message ||
+        "Unable to load the forecast. Check your internet connection and try again.";
+      cards.replaceChildren();
+    } finally {
+      refreshButton.disabled = false;
+      refreshButton.textContent = "Refresh Forecast";
+    }
+  }
+
+  refreshButton.addEventListener("click", loadForecast);
+  select.addEventListener("change", loadForecast);
+
+  loadForecast();
+})();
 
 

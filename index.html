@@ -289,12 +289,45 @@
     </div>
   </div>
 </section>
+<!-- COMMIT 20: 5-Day Weather Forecast -->
+<section class="weather-forecast-section" id="weatherForecast">
+  <div class="weather-heading">
+    <span class="weather-eyebrow">TRAVEL SMARTER</span>
+    <h2>5-Day Weather Forecast</h2>
+    <p>Check the weather before your next adventure.</p>
+  </div>
+
+  <div class="weather-controls">
+    <select id="weatherDestination" aria-label="Choose destination">
+      <option value="Dubai">Dubai</option>
+      <option value="Paris">Paris</option>
+      <option value="Tokyo">Tokyo</option>
+      <option value="Zurich">Zurich, Switzerland</option>
+      <option value="Mangalore">Mangalore</option>
+      <option value="Bengaluru">Bengaluru</option>
+    </select>
+
+    <button type="button" id="refreshWeather">
+      Refresh Forecast
+    </button>
+  </div>
+
+  <p id="weatherStatus" class="weather-status" role="status">
+    Loading forecast...
+  </p>
+
+  <div id="weatherCards" class="weather-cards"></div>
+
+  <p class="weather-note">
+    Forecast provided by Open-Meteo. Weather conditions may change.
+  </p>
+</section>
 
   <footer>
     <h3>🌍 TravelSphere</h3>
     <p>Explore more. Plan better. Travel smarter.</p>
     <p>© 2026 TravelSphere. Built for curious travellers.</p>
-    
+  
   </footer>
 
   <script src="script.js"></script>
