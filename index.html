@@ -1,579 +1,216 @@
-
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="theme-color" content="#0b1020">
-  <title>TravelSphere | Smart Travel Planner</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="TravelSphere — discover extraordinary destinations, plan beautiful journeys, track budgets, check weather and organize every adventure.">
+  <meta name="theme-color" content="#0b0b0d">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="TravelSphere — Go Beyond Ordinary">
+  <meta property="og:description" content="Discover places, design your journey, and travel beautifully.">
+  <meta property="og:image" content="https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=1200&q=85">
+  <meta name="twitter:card" content="summary_large_image">
+  <title>TravelSphere — Go Beyond Ordinary</title>
+  <link rel="preconnect" href="https://images.unsplash.com">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
-  
-  <!-- COMMIT 21: SEO & Social Sharing -->
-<meta
-  name="description"
-  content="Explore destinations, plan day-by-day itineraries, check travel weather, manage your budget, and prepare for your next adventure with TravelSphere."
-/>
-<meta name="robots" content="index, follow" />
-<meta name="theme-color" content="#111827" />
-
-<meta property="og:type" content="website" />
-<meta property="og:title" content="TravelSphere | Explore Beyond Boundaries" />
-<meta
-  property="og:description"
-  content="Discover destinations, plan trips, and organize your next adventure with TravelSphere."
-/>
-<meta property="og:image" content="https://placehold.co/1200x630/111827/FFFFFF?text=TravelSphere" />
-
-<meta name="twitter:card" content="summary_large_image" />
-<meta name="twitter:title" content="TravelSphere | Explore Beyond Boundaries" />
-<meta
-  name="twitter:description"
-  content="Your destination discovery and travel planning companion."
-/>
+  <script>
+    (function () {
+      try {
+        const saved = localStorage.getItem('ts-theme');
+        document.documentElement.dataset.theme = saved || 'dark';
+      } catch (_) {
+        document.documentElement.dataset.theme = 'dark';
+      }
+    })();
+  </script>
 </head>
 <body>
-
-  <header class="navbar">
-    <a href="#home" class="logo">🌍 TravelSphere</a>
-    <nav>
-      <a href="#home">Home</a>
-      <a href="#explore">Explore</a>
-      <a href="#planner">Planner</a>
-      <a href="#smartBudget">Budget</a>
-      <button type="button" class="theme-toggle" id="themeToggle">
-        🌙 Toggle Theme
-      </button>
-    </nav>
-  </header>
-
-  <main>
-    <section class="hero" id="home">
-      <div class="hero-content">
-        <p class="hero-badge">✦ YOUR NEXT ADVENTURE STARTS HERE</p>
-        <h1>Explore the world.<br><span>Travel smarter.</span></h1>
-        <p>Discover incredible destinations, plan your journey, and manage your travel budget in one place.</p>
-        <a href="#explore" class="hero-button">Explore Destinations →</a>
-        <a href="#planner" class="hero-secondary">Plan My Trip</a>
-      </div>
-    </section>
-
-    <section class="destinations-section" id="explore">
-      <div class="section-title">
-        <p>FIND YOUR NEXT ADVENTURE</p>
-        <h2>Popular Destinations</h2>
-        <p>Choose a destination to start planning your trip.</p>
-      </div>
-
-      <div class="destination-grid">
-        <article class="destination-card" data-destination="Dubai">
-          <div class="destination-emoji">🏙️</div>
-          <div class="card-content">
-            <h3>Dubai</h3>
-            <p>Luxury, shopping and desert adventures.</p>
-            <p>🌡️ Warm weather · ⭐ 4.8</p>
-            <button type="button" class="view-trip-btn" data-place="Dubai">View Trip →</button>
-          </div>
-        </article>
-
-        <article class="destination-card" data-destination="Paris">
-          <div class="destination-emoji">🗼</div>
-          <div class="card-content">
-            <h3>Paris</h3>
-            <p>Art, architecture and romantic streets.</p>
-            <p>🌡️ Mild weather · ⭐ 4.9</p>
-            <button type="button" class="view-trip-btn" data-place="Paris">View Trip →</button>
-          </div>
-        </article>
-
-        <article class="destination-card" data-destination="Tokyo">
-          <div class="destination-emoji">🏯</div>
-          <div class="card-content">
-            <h3>Tokyo</h3>
-            <p>Modern city life meets ancient culture.</p>
-            <p>🌡️ Seasonal weather · ⭐ 4.8</p>
-            <button type="button" class="view-trip-btn" data-place="Tokyo">View Trip →</button>
-          </div>
-        </article>
-
-        <article class="destination-card" data-destination="Switzerland">
-          <div class="destination-emoji">🏔️</div>
-          <div class="card-content">
-            <h3>Switzerland</h3>
-            <p>Alpine mountains, lakes and scenic trains.</p>
-            <p>🌡️ Cool weather · ⭐ 4.9</p>
-            <button type="button" class="view-trip-btn" data-place="Switzerland">View Trip →</button>
-          </div>
-        </article>
-      </div>
-    </section>
-
-    <section class="planner-section" id="planner">
-      <div class="section-title">
-        <p>MAKE IT YOUR OWN</p>
-        <h2>Smart Travel Planner</h2>
-        <p>Enter your preferences to create a simple itinerary.</p>
-      </div>
-
-      <div class="planner-container">
-        <form class="planner-form" id="travelPlannerForm">
-          <div class="form-group">
-            <label for="destination">Destination</label>
-            <input id="destination" name="destination" type="text"
-              placeholder="e.g. Paris" required>
-          </div>
-
-          <div class="form-group">
-            <label for="days">Number of days</label>
-            <input id="days" name="days" type="number"
-              min="1" max="30" value="3" required>
-          </div>
-
-          <div class="form-group">
-            <label for="budget">Total budget (₹)</label>
-            <input id="budget" name="budget" type="number"
-              min="1" placeholder="15000" required>
-          </div>
-
-          <div class="form-group">
-            <label for="travelStyle">Travel style</label>
-            <select id="travelStyle" name="travelStyle">
-              <option value="Adventure">Adventure</option>
-              <option value="Relaxation">Relaxation</option>
-              <option value="Culture">Culture</option>
-              <option value="Food">Food</option>
-              <option value="Family">Family</option>
-            </select>
-          </div>
-
-          <button type="submit" class="generate-btn">Generate Itinerary ✨</button>
-        </form>
-
-        <div id="plannerResult" class="planner-result" aria-live="polite">
-          <h3>Your itinerary will appear here</h3>
-          <p>Fill in your trip details and select Generate Itinerary.</p>
-        </div>
-
-        <div class="trip-actions">
-          <button type="button" class="export-trip-btn" onclick="downloadTripPlan('txt')">Download TXT</button>
-          <button type="button" class="export-trip-btn" onclick="downloadTripPlan('json')">Download JSON</button>
-          <button type="button" class="copy-btn" onclick="copyTripPlan()">Copy Itinerary</button>
-          <button type="button" class="save-btn" id="saveItineraryBtn">Save Trip</button>
-          <button type="button" class="print-btn" onclick="window.print()">Print</button>
-          <button type="button" class="export-trip-btn" onclick="shareTripPlan()">Share Trip</button>
-        </div>
-        <p id="shareTripMessage" aria-live="polite"></p>
-      </div>
-    </section>
-
-    <!-- COMMIT 17: TRIP HISTORY -->
-    <section class="trip-history-section" id="tripHistorySection">
-      <div class="trip-history-header">
-        <div>
-          <p class="history-eyebrow">YOUR JOURNEY</p>
-          <h2>Trip History</h2>
-          <p>Revisit destinations and itineraries you've explored.</p>
-        </div>
-        <button type="button" class="clear-history-btn" onclick="clearTripHistory()">
-          Clear History
-        </button>
-      </div>
-
-      <h3>Recently Viewed Destinations</h3>
-      <div id="recentDestinations" class="history-grid">
-        <p class="history-empty">No recently viewed destinations yet.</p>
-      </div>
-
-      <h3 class="saved-itineraries-title">Recently Generated Itineraries</h3>
-      <div id="recentItineraries" class="history-grid">
-        <p class="history-empty">Generate a trip to see it here.</p>
-      </div>
-    </section>
-
-    <!-- COMMIT 18: SMART BUDGET PLANNER -->
-    <section class="smart-budget-section" id="smartBudget">
-      <div class="smart-budget-heading">
-        <p class="budget-eyebrow">TRAVEL SMARTER</p>
-        <h2>Smart Budget Planner</h2>
-        <p>Track your travel costs and keep your spending under control.</p>
-      </div>
-
-      <div class="budget-input-grid">
-        <label for="travelBudgetAmount">
-          Total Travel Budget (₹)
-          <input id="travelBudgetAmount" type="number" min="1" placeholder="15000">
-        </label>
-
-        <label for="budgetTransport">
-          Transport (₹)
-          <input id="budgetTransport" type="number" min="0" value="0">
-        </label>
-
-        <label for="budgetAccommodation">
-          Accommodation (₹)
-          <input id="budgetAccommodation" type="number" min="0" value="0">
-        </label>
-
-        <label for="budgetFood">
-          Food (₹)
-          <input id="budgetFood" type="number" min="0" value="0">
-        </label>
-
-        <label for="budgetActivities">
-          Activities (₹)
-          <input id="budgetActivities" type="number" min="0" value="0">
-        </label>
-
-        <label for="budgetOther">
-          Other Expenses (₹)
-          <input id="budgetOther" type="number" min="0" value="0">
-        </label>
-      </div>
-
-      <button type="button" id="calculateTravelBudget" class="budget-calculate-btn">
-        Calculate My Budget
-      </button>
-
-      <div class="budget-results" aria-live="polite">
-        <div class="budget-stat">
-          <span>Total Budget</span>
-          <strong id="budgetTotalDisplay">₹0</strong>
-        </div>
-        <div class="budget-stat">
-          <span>Estimated Expenses</span>
-          <strong id="budgetExpenseDisplay">₹0</strong>
-        </div>
-        <div class="budget-stat">
-          <span>Remaining Balance</span>
-          <strong id="budgetRemainingDisplay">₹0</strong>
-        </div>
-      </div>
-
-      <div class="budget-progress-track">
-        <div id="budgetProgressBar" class="budget-progress-fill"></div>
-      </div>
-
-      <p id="budgetAlertMessage" class="budget-alert-message" aria-live="polite">
-        Enter your budget and expenses to begin.
-      </p>
-    </section>
-  </main>
-  
-<!-- COMMIT 19: TRAVEL CURRENCY CONVERTER -->
-<section class="currency-section" id="currencyConverter">
-  <div class="section-title">
-    <p>TRAVEL AROUND THE WORLD</p>
-    <h2>Currency Converter</h2>
-    <p>Estimate your spending in another currency.</p>
+  <div class="page-loader" id="pageLoader" aria-label="Loading TravelSphere">
+    <div class="loader-mark"><span>TS</span><i></i></div>
+    <p class="loader-name">TRAVEL<span>SPHERE</span></p>
+    <div class="loader-track"><span></span></div>
+    <small>PREPARING YOUR NEXT ESCAPE</small>
   </div>
 
-  <div class="currency-card">
-    <label for="currencyAmount">Amount</label>
-    <input id="currencyAmount" type="number" min="0.01" step="any" value="1000" placeholder="Enter amount">
-
-    <label for="currencyFrom">From</label>
-    <select id="currencyFrom">
-      <option value="INR">INR — Indian Rupee</option>
-      <option value="USD">USD — US Dollar</option>
-      <option value="EUR">EUR — Euro</option>
-      <option value="GBP">GBP — British Pound</option>
-      <option value="JPY">JPY — Japanese Yen</option>
-      <option value="AED">AED — UAE Dirham</option>
-      <option value="CAD">CAD — Canadian Dollar</option>
-      <option value="AUD">AUD — Australian Dollar</option>
-      <option value="SGD">SGD — Singapore Dollar</option>
-    </select>
-
-    <button type="button" id="swapCurrencies" class="currency-swap-btn">
-      ⇅ Swap Currencies
-    </button>
-
-    <label for="currencyTo">To</label>
-    <select id="currencyTo">
-      <option value="USD">USD — US Dollar</option>
-      <option value="INR">INR — Indian Rupee</option>
-      <option value="EUR">EUR — Euro</option>
-      <option value="GBP">GBP — British Pound</option>
-      <option value="JPY">JPY — Japanese Yen</option>
-      <option value="AED">AED — UAE Dirham</option>
-      <option value="CAD">CAD — Canadian Dollar</option>
-      <option value="AUD">AUD — Australian Dollar</option>
-      <option value="SGD">SGD — Singapore Dollar</option>
-    </select>
-
-    <button type="button" id="convertCurrency" class="currency-convert-btn">
-      Convert Currency
-    </button>
-
-    <div class="currency-result" aria-live="polite">
-      <p>Converted Amount</p>
-      <h3 id="currencyResult">Ready to convert</h3>
-      <p id="currencyRateInfo">Exchange rates are retrieved when you convert.</p>
-      <p id="currencyUpdatedAt"></p>
-    </div>
-  </div>
-</section>
-<!-- COMMIT 20: 5-Day Weather Forecast -->
-<section class="weather-forecast-section" id="weatherForecast">
-  <div class="weather-heading">
-    <span class="weather-eyebrow">TRAVEL SMARTER</span>
-    <h2>5-Day Weather Forecast</h2>
-    <p>Check the weather before your next adventure.</p>
-  </div>
-
-  <div class="weather-controls">
-    <select id="weatherDestination" aria-label="Choose destination">
-      <option value="Dubai">Dubai</option>
-      <option value="Paris">Paris</option>
-      <option value="Tokyo">Tokyo</option>
-      <option value="Zurich">Zurich, Switzerland</option>
-      <option value="Mangalore">Mangalore</option>
-      <option value="Bengaluru">Bengaluru</option>
-    </select>
-
-    <button type="button" id="refreshWeather">
-      Refresh Forecast
-    </button>
-  </div>
-
-  <p id="weatherStatus" class="weather-status" role="status">
-    Loading forecast...
-  </p>
-
-  <div id="weatherCards" class="weather-cards"></div>
-
-  <p class="weather-note">
-    Forecast provided by Open-Meteo. Weather conditions may change.
-  </p>
-</section>
-<!-- COMMIT 21: Ultimate Travel Experience Upgrade -->
-<main id="travelExperienceUpgrade">
-
-  <!-- Interactive Map -->
-  <section class="ts-upgrade-section" id="destinationMapSection">
-    <div class="ts-section-heading">
-      <span class="ts-eyebrow">DISCOVER THE WORLD</span>
-      <h2>Explore Destinations</h2>
-      <p>Choose a destination and explore its location on the map.</p>
-    </div>
-
-    <div class="ts-map-toolbar">
-      <label for="tsMapDestination">Choose a destination</label>
-      <select id="tsMapDestination">
-        <option value="Dubai">Dubai, UAE</option>
-        <option value="Paris">Paris, France</option>
-        <option value="Tokyo">Tokyo, Japan</option>
-        <option value="Zurich">Zurich, Switzerland</option>
-        <option value="Mangalore">Mangalore, India</option>
-        <option value="Bengaluru">Bengaluru, India</option>
-      </select>
-
-      <button type="button" id="tsLocateDestination">
-        Show on Map
-      </button>
-    </div>
-
-    <div
-      id="tsDestinationMap"
-      class="ts-destination-map"
-      role="region"
-      aria-label="Interactive map of travel destinations"
-    ></div>
-
-    <p id="tsMapStatus" class="ts-status" role="status">
-      Loading interactive map...
-    </p>
-  </section>
-
-  <!-- Day-by-Day Itinerary -->
-  <section class="ts-upgrade-section" id="dayPlannerSection">
-    <div class="ts-section-heading">
-      <span class="ts-eyebrow">MAKE EVERY DAY COUNT</span>
-      <h2>Day-by-Day Itinerary</h2>
-      <p>Build a simple daily travel plan for your next trip.</p>
-    </div>
-
-    <form id="tsItineraryForm" class="ts-itinerary-form">
-      <div class="ts-form-field">
-        <label for="tsItineraryDestination">Destination</label>
-        <input
-          id="tsItineraryDestination"
-          type="text"
-          placeholder="e.g. Paris"
-          maxlength="80"
-          required
-        />
-      </div>
-
-      <div class="ts-form-field">
-        <label for="tsItineraryDays">Number of days</label>
-        <input
-          id="tsItineraryDays"
-          type="number"
-          min="1"
-          max="14"
-          value="3"
-          required
-        />
-      </div>
-
-      <div class="ts-form-field">
-        <label for="tsItineraryStyle">Travel style</label>
-        <select id="tsItineraryStyle">
-          <option value="balanced">Balanced adventure</option>
-          <option value="culture">Culture and history</option>
-          <option value="nature">Nature and outdoors</option>
-          <option value="relaxed">Relaxed holiday</option>
-          <option value="food">Food and local experiences</option>
-        </select>
-      </div>
-
-      <button class="ts-primary-button" type="submit">
-        Create My Itinerary
-      </button>
-    </form>
-
-    <div id="tsItineraryOutput" class="ts-itinerary-output" aria-live="polite">
-      <p class="ts-muted">Your itinerary will appear here.</p>
-    </div>
-
-    <div class="ts-action-row">
-      <button type="button" id="tsSaveItinerary" class="ts-secondary-button">
-        Save Itinerary
-      </button>
-      <button type="button" id="tsExportItinerary" class="ts-secondary-button">
-        Download Itinerary
-      </button>
-    </div>
-
-    <p id="tsItineraryStatus" class="ts-status" role="status"></p>
-  </section>
-
-  <!-- Packing Checklist -->
-  <section class="ts-upgrade-section" id="packingChecklistSection">
-    <div class="ts-section-heading">
-      <span class="ts-eyebrow">PACK WITH CONFIDENCE</span>
-      <h2>Travel Packing Checklist</h2>
-      <p>Check items off as you prepare. Your progress is saved in this browser.</p>
-    </div>
-
-    <form id="tsPackingForm" class="ts-packing-form">
-      <label class="ts-sr-only" for="tsNewPackingItem">
-        Add a packing item
-      </label>
-      <input
-        id="tsNewPackingItem"
-        type="text"
-        maxlength="100"
-        placeholder="Add your own item..."
-        required
-      />
-      <button type="submit" class="ts-primary-button">Add Item</button>
-    </form>
-
-    <div class="ts-packing-progress">
-      <div class="ts-progress-track">
-        <div id="tsPackingProgressBar" class="ts-progress-fill"></div>
-      </div>
-      <p id="tsPackingProgressText" class="ts-status" aria-live="polite">
-        0 items packed
-      </p>
-    </div>
-
-    <div id="tsPackingList" class="ts-packing-list"></div>
-
-    <button type="button" id="tsResetPacking" class="ts-secondary-button">
-      Reset Checklist
-    </button>
-  </section>
-
-  <!-- Safety Information -->
-  <section class="ts-upgrade-section" id="travelSafetySection">
-    <div class="ts-section-heading">
-      <span class="ts-eyebrow">TRAVEL RESPONSIBLY</span>
-      <h2>Travel Safety Essentials</h2>
-      <p>Prepare before departure and keep important information accessible.</p>
-    </div>
-
-    <div class="ts-safety-grid">
-      <article class="ts-info-card">
-        <span class="ts-info-icon" aria-hidden="true">🛂</span>
-        <h3>Documents</h3>
-        <p>Check passport validity, visa requirements, tickets, and travel insurance.</p>
-      </article>
-
-      <article class="ts-info-card">
-        <span class="ts-info-icon" aria-hidden="true">🏥</span>
-        <h3>Health</h3>
-        <p>Carry necessary medication, prescriptions, and relevant medical information.</p>
-      </article>
-
-      <article class="ts-info-card">
-        <span class="ts-info-icon" aria-hidden="true">📱</span>
-        <h3>Stay Connected</h3>
-        <p>Save offline maps, accommodation details, and a trusted contact's number.</p>
-      </article>
-
-      <article class="ts-info-card">
-        <span class="ts-info-icon" aria-hidden="true">🔒</span>
-        <h3>Personal Security</h3>
-        <p>Protect valuables, use trusted transport, and check local travel advisories.</p>
-      </article>
-    </div>
-
-    <div class="ts-emergency-panel">
-      <h3>Emergency Information</h3>
-      <p>
-        Emergency numbers vary by country and region. Verify the official local
-        emergency number and nearest embassy or consulate before travelling.
-      </p>
-      <a
-        href="https://www.gov.uk/foreign-travel-advice"
-        target="_blank"
-        rel="noopener noreferrer"
-      >
-        Check official foreign travel advice
+  <div class="site-shell">
+    <header class="site-header" id="top">
+      <a class="brand" href="#top" aria-label="TravelSphere home">
+        <span class="brand-symbol"><span></span><span></span><span></span></span>
+        <span class="brand-name">travel<span>sphere</span><small>GO BEYOND ORDINARY</small></span>
       </a>
-      <p class="ts-muted">
-        This is general travel information, not a substitute for official local guidance.
-      </p>
-    </div>
-  </section>
+      <nav class="main-nav" id="mainNav" aria-label="Main navigation">
+        <a class="active" href="#destinations">Discover</a>
+        <a href="#planner">Trip planner</a>
+        <a href="#tools">Travel tools</a>
+        <a href="#journal">My journeys</a>
+      </nav>
+      <div class="header-actions">
+        <button class="icon-button theme-toggle" id="themeToggle" aria-label="Switch theme" title="Switch theme">☼</button>
+        <a class="header-cta" href="#planner">Plan a trip <span>↗</span></a>
+        <button class="menu-toggle" id="menuToggle" aria-label="Open navigation" aria-expanded="false">☰</button>
+      </div>
+    </header>
 
-  <!-- Accessibility Controls -->
-  <section class="ts-upgrade-section" id="accessibilitySection">
-    <div class="ts-section-heading">
-      <span class="ts-eyebrow">DESIGNED FOR EVERY TRAVELLER</span>
-      <h2>Accessibility Preferences</h2>
-      <p>Adjust text size or reduce decorative motion on this page.</p>
-    </div>
+    <main>
+      <section class="hero" aria-labelledby="heroTitle">
+        <div class="hero-image"></div>
+        <div class="hero-shade"></div>
+        <div class="hero-grain"></div>
+        <div class="hero-content">
+          <div class="eyebrow hero-eyebrow"><span class="eyebrow-line"></span> YOUR NEXT CHAPTER STARTS HERE</div>
+          <h1 id="heroTitle">The world is<br>your <em>masterpiece.</em></h1>
+          <p class="hero-copy">Find the places that move you. Build journeys that feel like you. Make every mile mean something.</p>
+          <div class="hero-actions">
+            <a class="button button-gold" href="#destinations">Explore destinations <span>↗</span></a>
+            <a class="text-link" href="#planner"><span class="play-icon">▶</span> Design your journey</a>
+          </div>
+          <div class="hero-proof">
+            <div class="avatar-stack">
+              <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=80&q=80" alt="">
+              <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=80&q=80" alt="">
+              <img src="https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&w=80&q=80" alt="">
+            </div>
+            <div><strong>Made for curious souls</strong><small>From weekend escapes to once-in-a-lifetime trips</small></div>
+          </div>
+        </div>
+        <div class="hero-side-note"><span>01 / 04</span><i></i><span>FIND YOUR ELSEWHERE</span></div>
+        <div class="hero-bottom">
+          <span><b>SCROLL TO EXPLORE</b><span class="scroll-line"></span></span>
+          <span class="hero-coordinate">12° 54' 51.0" N &nbsp; 74° 51' 21.6" E</span>
+        </div>
+        <div class="hero-floating-card glass-panel">
+          <span class="floating-icon">✦</span>
+          <div><small>THE WORLD IS WAITING</small><strong>Where to next?</strong></div>
+          <a href="#planner" aria-label="Start planning">↗</a>
+        </div>
+      </section>
 
-    <div class="ts-accessibility-controls">
-      <button type="button" id="tsTextSmaller" class="ts-secondary-button">
-        A− Smaller text
-      </button>
-      <button type="button" id="tsTextLarger" class="ts-secondary-button">
-        A+ Larger text
-      </button>
-      <button type="button" id="tsResetAccessibility" class="ts-secondary-button">
-        Reset display
-      </button>
-    </div>
+      <section class="quick-search section-wrap reveal">
+        <div class="search-intro"><span class="eyebrow">START EXPLORING</span><h2>Where will you <em>go?</em></h2></div>
+        <form id="quickSearchForm" class="search-bar">
+          <label class="search-field"><span>⌖</span><span><small>DESTINATION</small><input id="quickDestination" placeholder="Try Tokyo, Paris, Bali..." autocomplete="off"></span></label>
+          <label class="search-field"><span>◷</span><span><small>TRIP LENGTH</small><select id="quickDays"><option value="3">3 days</option><option value="5" selected>5 days</option><option value="7">7 days</option><option value="10">10 days</option><option value="14">14 days</option></select></span></label>
+          <button class="button button-gold search-submit" type="submit">Find my escape <span>↗</span></button>
+        </form>
+      </section>
 
-    <label class="ts-motion-option">
-      <input type="checkbox" id="tsReduceMotion" />
-      Reduce decorative animations
-    </label>
-  </section>
+      <section class="section-wrap destinations-section" id="destinations">
+        <div class="section-heading reveal"><div><span class="eyebrow">CURATED FOR YOUR CURIOSITY</span><h2>Places worth <em>the journey.</em></h2></div><a class="text-link" href="#mapSection">Explore the map <span>↗</span></a></div>
+        <div class="destination-grid">
+          <article class="destination-card destination-large reveal" tabindex="0" data-destination="Bali">
+            <img src="https://images.unsplash.com/photo-1537996194471-e657df975ab4?auto=format&fit=crop&w=1200&q=85" alt="Lush tropical Bali temple and greenery" loading="lazy">
+            <div class="card-shade"></div><span class="card-tag">ISLAND ESCAPE</span><button class="save-destination" aria-label="Save Bali" data-save="Bali">♡</button>
+            <div class="destination-info"><div><span>INDONESIA</span><h3>Bali</h3><p>Temple mornings. Ocean evenings.</p></div><button class="round-arrow" data-plan="Bali" aria-label="Plan Bali trip">↗</button></div>
+          </article>
+          <article class="destination-card reveal" tabindex="0" data-destination="Switzerland">
+            <img src="https://images.unsplash.com/photo-1531366936337-7c912a4589a7?auto=format&fit=crop&w=900&q=85" alt="Swiss alpine mountains under a dramatic sky" loading="lazy">
+            <div class="card-shade"></div><span class="card-tag">MOUNTAIN AIR</span><button class="save-destination" aria-label="Save Switzerland" data-save="Switzerland">♡</button>
+            <div class="destination-info"><div><span>THE ALPS</span><h3>Switzerland</h3><p>Find your higher ground.</p></div><button class="round-arrow" data-plan="Switzerland" aria-label="Plan Switzerland trip">↗</button></div>
+          </article>
+          <article class="destination-card reveal" tabindex="0" data-destination="Japan">
+            <img src="https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?auto=format&fit=crop&w=900&q=85" alt="Traditional Japanese street at dusk" loading="lazy">
+            <div class="card-shade"></div><span class="card-tag">CULTURE & COLOUR</span><button class="save-destination" aria-label="Save Japan" data-save="Japan">♡</button>
+            <div class="destination-info"><div><span>JAPAN</span><h3>Kyoto</h3><p>Old-world soul, new-world wonder.</p></div><button class="round-arrow" data-plan="Kyoto" aria-label="Plan Kyoto trip">↗</button></div>
+          </article>
+          <article class="destination-card reveal" tabindex="0" data-destination="Dubai">
+            <img src="https://images.unsplash.com/photo-1512453979798-5ea266f8880c?auto=format&fit=crop&w=900&q=85" alt="Dubai skyline at sunset" loading="lazy">
+            <div class="card-shade"></div><span class="card-tag">CITY OF CONTRASTS</span><button class="save-destination" aria-label="Save Dubai" data-save="Dubai">♡</button>
+            <div class="destination-info"><div><span>UNITED ARAB EMIRATES</span><h3>Dubai</h3><p>Big ideas meet golden sands.</p></div><button class="round-arrow" data-plan="Dubai" aria-label="Plan Dubai trip">↗</button></div>
+          </article>
+        </div>
+      </section>
 
-</main>
+      <section class="editorial-banner reveal">
+        <img src="https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=2000&q=85" alt="Dramatic mountain peaks above the clouds" loading="lazy">
+        <div class="editorial-overlay"></div>
+        <div class="editorial-content"><span class="eyebrow">NOT JUST A TRIP. A FEELING.</span><h2>Collect moments.<br><em>Not just miles.</em></h2><a class="button button-light" href="#planner">Build your story <span>↗</span></a></div>
+        <span class="editorial-index">FIELD NOTES / 001</span>
+      </section>
 
-  <footer>
-    <h3>🌍 TravelSphere</h3>
-    <p>Explore more. Plan better. Travel smarter.</p>
-    <p>© 2026 TravelSphere. Built for curious travellers.</p>
-  
-  </footer>
+      <section class="section-wrap planner-section" id="planner">
+        <div class="section-heading reveal"><div><span class="eyebrow">YOUR JOURNEY, YOUR RULES</span><h2>Make a plan. <em>Leave room for magic.</em></h2><p class="section-subtitle">Shape a trip around your time, budget and travel mood.</p></div></div>
+        <div class="planner-layout">
+          <form id="plannerForm" class="planner-panel glass-panel reveal">
+            <div class="panel-topline"><span class="eyebrow">TRIP BUILDER</span><span class="live-dot">PERSONALIZED</span></div>
+            <label>Where are you headed?<input id="plannerDestination" required maxlength="80" placeholder="Enter a destination"></label>
+            <div class="form-row">
+              <label>Days away<select id="plannerDays"><option>2</option><option>3</option><option selected>5</option><option>7</option><option>10</option><option>14</option></select></label>
+              <label>Budget (₹)<input id="plannerBudget" type="number" min="0" step="500" value="25000" required></label>
+            </div>
+            <label>Your travel mood<select id="plannerStyle"><option value="balanced">A little bit of everything</option><option value="culture">Culture & history</option><option value="nature">Nature & outdoors</option><option value="relaxed">Slow and relaxed</option><option value="food">Food & local life</option></select></label>
+            <button class="button button-gold full-button" type="submit">Create my itinerary <span>↗</span></button>
+            <p class="form-note">Your plan is a starting point. Verify routes, prices and opening hours before travelling.</p>
+          </form>
+          <div class="itinerary-panel reveal">
+            <div class="itinerary-head"><div><span class="eyebrow">YOUR TRAVEL BLUEPRINT</span><h3 id="itineraryTitle">Your next adventure</h3></div><span class="itinerary-spark">✳</span></div>
+            <div id="itineraryOutput" class="itinerary-output"><div class="empty-state"><span>✧</span><strong>Your story starts here.</strong><p>Fill in your trip details and we'll sketch a day-by-day starting plan.</p></div></div>
+            <div class="itinerary-actions"><button class="button button-outline" id="saveItinerary" type="button">♡ Save plan</button><button class="button button-outline" id="downloadItinerary" type="button">↓ Download</button><button class="button button-outline" id="shareItinerary" type="button">↗ Share</button></div>
+            <p class="status-line" id="plannerStatus" aria-live="polite"></p>
+          </div>
+        </div>
+      </section>
 
+      <section class="map-weather-band" id="mapSection">
+        <div class="section-wrap map-weather-grid">
+          <div class="map-copy reveal"><span class="eyebrow">GET YOUR BEARINGS</span><h2>See where<br><em>life takes you.</em></h2><p>Pick a destination, explore its place on the map, and check the five-day forecast before you go.</p>
+            <label class="field-label" for="mapDestination">Choose your destination</label><select id="mapDestination" class="field-control"><option value="Bali">Bali, Indonesia</option><option value="Switzerland">Switzerland</option><option value="Japan">Kyoto, Japan</option><option value="Dubai">Dubai, UAE</option><option value="Paris">Paris, France</option><option value="Tokyo">Tokyo, Japan</option><option value="Mangalore">Mangalore, India</option><option value="Bengaluru">Bengaluru, India</option></select>
+            <div class="weather-mini"><div><span class="eyebrow">FIVE-DAY OUTLOOK</span><h3 id="weatherLocation">Bali forecast</h3></div><button id="refreshWeather" class="icon-button" type="button" aria-label="Refresh weather">↻</button></div>
+            <div id="weatherCards" class="weather-cards"><p class="muted">Loading forecast…</p></div><p id="weatherStatus" class="status-line" aria-live="polite"></p>
+          </div>
+          <div class="map-frame reveal"><div class="map-topbar"><span><i></i> DESTINATION RADAR</span><span>LIVE MAP</span></div><div id="destinationMap" class="destination-map" aria-label="Interactive map"></div><div class="map-caption"><span>✦ <b id="mapPlaceName">Bali, Indonesia</b></span><span>Move the map to explore</span></div></div>
+        </div>
+      </section>
+
+      <section class="section-wrap tools-section" id="tools">
+        <div class="section-heading reveal"><div><span class="eyebrow">THE DETAILS, HANDLED</span><h2>Travel smarter. <em>Feel lighter.</em></h2></div></div>
+        <div class="tools-grid">
+          <article class="tool-card budget-tool reveal"><div class="tool-icon">◈</div><span class="eyebrow">BUDGET STUDIO</span><h3>Know your numbers.</h3><p>Break down your spending before it surprises you.</p>
+            <form id="budgetForm" class="budget-form">
+              <label>Total budget (₹)<input id="budgetTotal" type="number" min="0" value="25000"></label>
+              <div class="budget-input-grid"><label>Stay<input id="budgetStay" type="number" min="0" value="8000"></label><label>Transport<input id="budgetTransport" type="number" min="0" value="5000"></label><label>Food<input id="budgetFood" type="number" min="0" value="4000"></label><label>Activities<input id="budgetActivities" type="number" min="0" value="3000"></label><label>Other<input id="budgetOther" type="number" min="0" value="1000"></label></div>
+              <button class="button button-gold full-button" type="submit">Calculate budget</button>
+            </form>
+            <div class="budget-result"><div><small>ESTIMATED SPEND</small><strong id="budgetSpend">₹21,000</strong></div><div><small>REMAINING</small><strong id="budgetRemaining">₹4,000</strong></div></div><div class="budget-track"><span id="budgetProgress"></span></div><p id="budgetStatus" class="status-line" aria-live="polite"></p>
+          </article>
+          <article class="tool-card currency-tool reveal"><div class="tool-icon">⇄</div><span class="eyebrow">CURRENCY DESK</span><h3>Money, made simple.</h3><p>Get a live reference conversion for your destination.</p>
+            <form id="currencyForm" class="currency-form"><label>Amount<input id="currencyAmount" type="number" min="0" step="any" value="100"></label><div class="currency-row"><label>From<select id="currencyFrom"><option>INR</option><option>USD</option><option>EUR</option><option>GBP</option><option>JPY</option><option>AED</option><option>AUD</option><option>CAD</option><option>SGD</option></select></label><button id="swapCurrency" class="icon-button swap-button" type="button" aria-label="Swap currencies">⇄</button><label>To<select id="currencyTo"><option>USD</option><option>INR</option><option>EUR</option><option>GBP</option><option>JPY</option><option>AED</option><option>AUD</option><option>CAD</option><option>SGD</option></select></label></div><button class="button button-gold full-button" type="submit">Convert currency</button></form>
+            <div class="conversion-result"><small>CONVERTED AMOUNT</small><strong id="currencyResult">—</strong><p id="currencyRate" class="status-line" aria-live="polite">Uses indicative exchange rates.</p></div>
+          </article>
+          <article class="tool-card packing-tool reveal"><div class="tool-icon">☑</div><span class="eyebrow">PACKING ROOM</span><h3>Ready for take-off.</h3><p>Keep the essentials in check and travel with less stress.</p>
+            <form id="packingForm" class="packing-add"><input id="packingInput" maxlength="90" placeholder="Add a packing item" aria-label="New packing item"><button class="button button-gold" type="submit">Add</button></form>
+            <div id="packingList" class="packing-list"></div><div class="packing-footer"><span id="packingProgress">0 items packed</span><button id="resetPacking" type="button" class="subtle-button">Reset</button></div>
+          </article>
+        </div>
+      </section>
+
+      <section class="section-wrap safety-section reveal" id="safety">
+        <div class="safety-image"><img src="https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1100&q=85" alt="Traveller looking out across a scenic landscape" loading="lazy"><div class="safety-image-label">GO FAR. GO PREPARED.</div></div>
+        <div class="safety-copy"><span class="eyebrow">GOOD JOURNEYS START WITH CARE</span><h2>Adventure boldly.<br><em>Travel thoughtfully.</em></h2><p>A little preparation makes room for a lot more wonder. Keep important details close and check official advice before departure.</p>
+          <div class="safety-list"><div><span>01</span><p><b>Keep documents secure</b><small>Store copies of IDs, bookings and insurance separately.</small></p></div><div><span>02</span><p><b>Stay connected</b><small>Share your plans with someone you trust and save offline maps.</small></p></div><div><span>03</span><p><b>Know local guidance</b><small>Confirm emergency numbers, health guidance and transport options.</small></p></div></div>
+          <a class="text-link" href="https://www.gov.uk/foreign-travel-advice" target="_blank" rel="noopener noreferrer">Read official travel advice <span>↗</span></a>
+        </div>
+      </section>
+
+      <section class="section-wrap journal-section" id="journal">
+        <div class="section-heading reveal"><div><span class="eyebrow">YOUR PERSONAL TRAVEL JOURNAL</span><h2>Keep the journeys <em>close.</em></h2><p class="section-subtitle">Saved plans and favourite places stay in this browser.</p></div><button id="clearSaved" class="subtle-button" type="button">Clear saved items</button></div>
+        <div id="savedItems" class="saved-grid"><div class="empty-saved">Your saved places and itineraries will appear here.</div></div>
+      </section>
+
+      <section class="final-cta reveal"><img src="https://images.unsplash.com/photo-1470770841072-f978cf4d019e?auto=format&fit=crop&w=2000&q=85" alt="" loading="lazy"><div class="final-cta-overlay"></div><div class="final-cta-content"><span class="eyebrow">THE NEXT GREAT STORY IS YOURS</span><h2>Out there is<br><em>calling.</em></h2><a class="button button-gold" href="#planner">Start your journey <span>↗</span></a></div></section>
+    </main>
+
+    <footer class="site-footer">
+      <a class="brand footer-brand" href="#top"><span class="brand-symbol"><span></span><span></span><span></span></span><span class="brand-name">travel<span>sphere</span><small>GO BEYOND ORDINARY</small></span></a>
+      <p>Made for the places you haven't met yet.</p>
+      <div class="footer-links"><a href="#destinations">Discover</a><a href="#planner">Plan</a><a href="#tools">Travel tools</a><a href="#safety">Travel safely</a></div>
+      <small>© <span id="currentYear"></span> TravelSphere. Explore thoughtfully.</small>
+    </footer>
+  </div>
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  <button class="back-to-top" id="backToTop" aria-label="Back to top">↑</button>
   <script src="script.js"></script>
 </body>
 </html>
